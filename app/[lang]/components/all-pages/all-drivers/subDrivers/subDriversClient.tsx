@@ -36,42 +36,44 @@ export default function ProductBySubCategoryPage(props: Props) {
               let counterShow = 0;
 
               for (const key in allSpecsCombined) {
-                if(key !== 'series' && key != "type" && key != "series-acr") {
-                  const allValueWithoutDuplicates: number[] = removeDuplicates(allSpecsCombined[key].map((val) => Number(val.value)));
-                  const allValueWithoutDuplicatesAndNone = allValueWithoutDuplicates.filter(number => !Number.isNaN(number));
-                  const sortedValues = allValueWithoutDuplicatesAndNone.slice().sort((a, b) => a - b);
-                  if(sortedValues.length>1){
-                    counterShow+=1
+                if(key !== 'impedance' && key !== 'program-power'){ 
+                  if(key !== 'series' && key != "type" && key != "series-acr") {
+                    const allValueWithoutDuplicates: number[] = removeDuplicates(allSpecsCombined[key].map((val) => Number(val.value)));
+                    const allValueWithoutDuplicatesAndNone = allValueWithoutDuplicates.filter(number => !Number.isNaN(number));
+                    const sortedValues = allValueWithoutDuplicatesAndNone.slice().sort((a, b) => a - b);
+                    if(sortedValues.length>1){
+                      counterShow+=1
+                    }
+                    sliderRows.push(
+                      {
+                        name: locale === 'id' ? allSpecsCombined[key][0].childnameIndo : allSpecsCombined[key][0].childnameEnglish, 
+                        value: sortedValues, 
+                        unit: allSpecsCombined[key][0].unit,
+                        max_index: sortedValues.length - 1,
+                        min_index: 0,
+                        minIndex: 0,
+                        maxIndex: sortedValues.length - 1,
+                        slug: key
+                      },
+                    )
                   }
-                  sliderRows.push(
-                    {
-                      name: locale === 'id' ? allSpecsCombined[key][0].childnameIndo : allSpecsCombined[key][0].childnameEnglish, 
-                      value: sortedValues, 
-                      unit: allSpecsCombined[key][0].unit,
-                      max_index: sortedValues.length - 1,
-                      min_index: 0,
-                      minIndex: 0,
-                      maxIndex: sortedValues.length - 1,
-                      slug: key
-                    },
-                  )
-                }
-                else{
-                  const allValueWithoutDuplicates: string[] = removeDuplicates(allSpecsCombined[key].map((val) => val.value));
-                  const allValueWithoutDuplicatesAndNone = allValueWithoutDuplicates.filter(number => number != '');
-                  const sortedValues = allValueWithoutDuplicatesAndNone.sort()
-                  if(sortedValues.length>1){
-                    counterShow+=1
+                  else{
+                    const allValueWithoutDuplicates: string[] = removeDuplicates(allSpecsCombined[key].map((val) => val.value));
+                    const allValueWithoutDuplicatesAndNone = allValueWithoutDuplicates.filter(number => number != '');
+                    const sortedValues = allValueWithoutDuplicatesAndNone.sort()
+                    if(sortedValues.length>1){
+                      counterShow+=1
+                    }
+                    checkboxRows.push(
+                      {
+                        name: locale === 'id' ? allSpecsCombined[key][0].childnameIndo : allSpecsCombined[key][0].childnameEnglish, 
+                        value: sortedValues, 
+                        unit: allSpecsCombined[key][0].unit,
+                        slug: key,
+                      },
+                    )
                   }
-                  checkboxRows.push(
-                    {
-                      name: locale === 'id' ? allSpecsCombined[key][0].childnameIndo : allSpecsCombined[key][0].childnameEnglish, 
-                      value: sortedValues, 
-                      unit: allSpecsCombined[key][0].unit,
-                      slug: key,
-                    },
-                  )
-                }
+                } 
               }
 
               if(counterShow===0){

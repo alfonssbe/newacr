@@ -14,7 +14,7 @@ export default async function ProductByCategoryPageJsonLd({ params }: Props) {
   const t = await getTranslations({ locale: lang, namespace: 'SEO Metadata JsonLd' });
   const baseUrl = process.env.NEXT_PUBLIC_ROOT_URL ?? 'http://localhost:3002';
   const allprodserver : AllProductsJsonType[] = await getAllProductsJsonld(API);
-
+  console.log(allprodserver)
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",

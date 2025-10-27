@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { AllFilterProductsOnlyType, ChildSpecificationProp } from "../types";
+import { AllFilterProductsOnlyType, ChildSpecificationProp, specForProductCardProps } from "../types";
 
 const getAllProductsForFilterPage = async (api: string): Promise<[AllFilterProductsOnlyType[], Record<string, ChildSpecificationProp[]>]> => {
 
@@ -92,7 +92,6 @@ const getAllProductsForFilterPage = async (api: string): Promise<[AllFilterProdu
         })
       }
     }
-    
 
     let temp: AllFilterProductsOnlyType = {
       products: {
@@ -102,7 +101,12 @@ const getAllProductsForFilterPage = async (api: string): Promise<[AllFilterProdu
         cover_img: {
           url: val.cover_img[0].url
         },
-        allCat: val.allCat
+        allCat: val.allCat,
+        spec: {
+          sensitivity : alltempSpec.find((val) => val.slugEnglish === 'sensitivity') ?? null,
+          impedance : alltempSpec.find((val) => val.slugEnglish === 'impedance') ?? null,
+          programpower : alltempSpec.find((val) => val.slugEnglish === 'program-power') ?? null
+        }
       },
       size: {
         name: val.size.value,

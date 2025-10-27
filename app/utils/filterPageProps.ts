@@ -2,6 +2,8 @@ export const allproducts = [
   'series',
   'series-acr',
   'type',
+  'impedance',
+  'program-power',
   'size',
   'sensitivity',
   'voice-coil-diameter',
@@ -9,12 +11,16 @@ export const allproducts = [
 
 export const allproductsSubCat = [
   'type',
+  'impedance',
+  'program-power',
   'size',
   'sensitivity',
   'voice-coil-diameter',
 ]
 
 export const allproductsSubSubCat = [
+  'impedance',
+  'program-power',
   'size',
   'sensitivity',
   'voice-coil-diameter',

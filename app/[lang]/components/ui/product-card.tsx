@@ -65,7 +65,22 @@ const ProductCard: React.FC<ReviewCard> = ({
           </div>
         </div>
         <h3 className="text-lg lg:text-3xl font-bold text-center text-black line-clamp-1">{data.name}</h3>
-        <h4 className="text-sm text-black lg:text-base text-center font-light line-clamp-1">{data.allCat.find((val) => val.type === 'Sub Sub Category')?.name} - {data.allCat.find((val) => val.type === 'Series')?.name}</h4>
+        <h4 className="text-sm text-black lg:text-base text-center font-light line-clamp-1">
+          {(() => {
+            const subSub = data.allCat.find((val) => val.type === 'Sub Sub Category')?.name || '';
+            const series = data.allCat.find((val) => val.type === 'Series')?.name || '';
+
+            // Build the parts
+            const subSubPart = subSub;
+            const seriesPart = series ? `${series} Series` : '';
+
+            // Combine with a dash only if both exist
+            if (subSubPart && seriesPart) return `${subSubPart} - ${seriesPart}`;
+            if (subSubPart) return subSubPart;
+            if (seriesPart) return seriesPart;
+            return '';
+          })()}
+        </h4>
       {isSparepart ? 
         <div className="grid grid-cols-1 w-full py-4 gap-2">
           <div className="flex items-center h-auto">
@@ -78,11 +93,30 @@ const ProductCard: React.FC<ReviewCard> = ({
               lazy={false}
             />
           </div>   
-          {/* <div className="w-full min-h-[160px] bg-transparent rounded-md p-2">
-            <div className="text-sm text-black lg:text-base font-light pt-2"><h4 className=" line-clamp-1">{t('sensitivity-spec')}</h4><h5 className="font-semibold">{data.specification.spl && data.specification.spl != "" ? data.specification.spl.concat(" dB") : "-"}</h5></div>
-            <div className="text-sm text-black lg:text-base font-light pt-2"><h4 className=" line-clamp-1">{t('impedansi-spec')}</h4><h5 className="font-semibold">{data.specification.impedansi && data.specification.impedansi != "" ? data.specification.impedansi.concat(" Ω") : "-"}</h5></div>
-            <div className="text-sm text-black lg:text-base font-light pt-2"><h4 className=" line-clamp-1">{t('program-power-spec')}</h4><h5 className="font-semibold">{data.specification.program_power && data.specification.program_power != "" ? data.specification.program_power.concat(" W") : "-"}</h5></div>
-          </div> */}
+          <div className="w-full min-h-[160px] bg-transparent rounded-md p-2">
+            <div className="text-sm text-black lg:text-base font-light pt-2"><h4 className=" line-clamp-1">{t('sensitivity-spec')}</h4>
+              <h5 className="font-semibold">
+                {data.spec.sensitivity ? 
+                  data.spec.sensitivity.value != "-" && data.spec.sensitivity.value != "" && <>{data.spec.sensitivity.value} {data.spec.sensitivity.unit}</>
+                :
+                <>-</>} 
+              </h5></div>
+            <div className="text-sm text-black lg:text-base font-light pt-2"><h4 className=" line-clamp-1">{t('impedansi-spec')}</h4>
+              <h5 className="font-semibold">
+                {data.spec.impedance ? 
+                  data.spec.impedance.value != "-" && data.spec.impedance.value != "" && <>{data.spec.impedance.value} {data.spec.impedance.unit}</>
+                :
+                <>-</>}
+                </h5></div>
+            <div className="text-sm text-black lg:text-base font-light pt-2"><h4 className=" line-clamp-1">{t('program-power-spec')}</h4>
+              <h5 className="font-semibold">
+                {data.spec.programpower ? 
+                  data.spec.programpower.value != "-" && data.spec.programpower.value != "" && <>{data.spec.programpower.value} {data.spec.programpower.unit}</>
+                :
+                <>-</>} 
+              </h5>
+            </div>
+          </div>
         </div>
         :
         <div className="grid grid-cols-2 w-full py-4 gap-2">
@@ -96,28 +130,37 @@ const ProductCard: React.FC<ReviewCard> = ({
               lazy={false}
             />
           </div>   
-          {/* <div className="w-full min-h-[160px] bg-transparent rounded-md p-2">
+          <div className="w-full min-h-[160px] bg-transparent rounded-md p-2">
             <div className="text-sm text-black lg:text-base font-light pt-2">
               <h4 className=" line-clamp-1">
                 {t('sensitivity-spec')}
               </h4>
               <h5 className="font-semibold">
-                {data.specs.find((val) => val.slugEnglish === 'sensitivity')?.value ?? '-'} 
+                {data.spec.sensitivity ? 
+                  data.spec.sensitivity.value != "-" && data.spec.sensitivity.value != "" && <>{data.spec.sensitivity.value} {data.spec.sensitivity.unit}</>
+                :
+                <>-</>} 
               </h5>
             </div>
             <div className="text-sm text-black lg:text-base font-light pt-2">
               <h4 className=" line-clamp-1">{t('impedansi-spec')}</h4>
               <h5 className="font-semibold">
-                {data.specs.find((val) => val.slugEnglish === 'impedance')?.value ?? '-'} 
+                {data.spec.impedance ? 
+                  data.spec.impedance.value != "-" && data.spec.impedance.value != "" && <>{data.spec.impedance.value} {data.spec.impedance.unit}</>
+                :
+                <>-</>} 
               </h5>
             </div>
             <div className="text-sm text-black lg:text-base font-light pt-2">
               <h4 className=" line-clamp-1">{t('program-power-spec')}</h4>
               <h5 className="font-semibold">
-                {data.specs.find((val) => val.slugEnglish === 'program-power')?.value ?? '-'} 
+                {data.spec.programpower ? 
+                  data.spec.programpower.value != "-" && data.spec.programpower.value != "" && <>{data.spec.programpower.value} {data.spec.programpower.unit}</>
+                :
+                <>-</>} 
               </h5>
             </div>
-          </div> */}
+          </div>
         </div>
       }
       
