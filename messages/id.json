@@ -1,0 +1,293 @@
+{
+  "Language Selector": {
+    "title": "Pilih Bahasa"
+  },
+  "Navbar": {
+    "home": "HOME",
+    "all-drivers": "SEMUA DRIVER",
+    "products": "PRODUK",
+    "comparison": "PERBANDINGAN",
+    "news": "BERITA",
+    "about-us": "TENTANG KAMI",
+    "catalogue": "KATALOG",
+    "distributors": "DISTRIBUTOR",
+    "other-brand": "BRAND LAIN",
+    "contact": "KONTAK",
+    "search": "Cari Produk",
+    "search-not-found": "Produk tidak ditemukan.",
+    "view-all-product": "LIHAT SEMUA PRODUK"
+  },
+  "Navbar Content": {
+    "navbar-content-sensitivity": "Sensitivity",
+    "navbar-content-diameter-voice-coil": "Diameter Voice Coil",
+    "navbar-content-program-power": "Daya Program",
+    "navbar-content-nominal-power-handling": "Nominal Power Handling",
+    "navbar-content-impedansi": "Impedansi",
+    "navbar-content-respon-frekuensi": "Lebar Frekuensi",
+    "navbar-content-placeholder": "Pilih 1 produk untuk melihat preview!",
+    "navbar-content-have-sparepart": "SPAREPART TERSEDIA"
+  },
+  "Homepage": {
+    "Heading 1": "Selamat Datang di Website Resmi ACR Speaker!"
+  },
+  "Keunggulan Home": {
+    "h2 title": "Keunggulan ACR Speaker",
+    "description 1": "Free Jasa Servis (Sparepart Tersedia)",
+    "description 2": "100% Karya Anak Bangsa",
+    "description 3": "Pengukuran Standar Internasional"
+  },
+  "New Product Home": {
+    "h2 title": "Produk Terbaru ACR Speaker!",
+    "tombol-spesifikasi": "SPESIFIKASI",
+    "tombol-perbandingan": "PERBANDINGAN",
+    "sensitivity-spec": "Sensitivity",
+    "impedansi-spec": "Impedansi",
+    "program-power-spec": "Daya Program"
+  },
+  "Series Home": {
+    "h2 title": "Semua Seri ACR Speaker",
+    "h3 acr series": "Seri ACR milik ACR Speaker",
+    "h3 desibel series": "Seri Desibel",
+    "h3 curve series": "Seri Curve",
+    "h3 acr fabulous": "Seri Fabulous milik ACR Speaker",
+    "h3 acr deluxe": "Seri Deluxe milik ACR Speaker",
+    "h3 acr excellent": "Seri Excellent milik ACR Speaker",
+    "h3 acr premier": "Seri Premier milik ACR Speaker",
+    "all speaker": "Semua Speaker milik ACR Speaker",
+    "all subwoofer": "Semua Subwoofer milik ACR Speaker",
+    "all woofer": "Semua Woofer milik ACR Speaker",
+    "all midrange": "Semua Midrange milik ACR Speaker",
+    "all fullrange": "Semua Fullrange milik ACR Speaker",
+    "all tweeter": "Semua Tweeter milik ACR Speaker",
+    "all compression driver": "Semua Compression Driver milik ACR Speaker",
+    "all sparepart": "Semua Sparepart milik ACR Speaker",
+    "series-title": "SERIES SPEAKER",
+    "series-type": "TIPE SPEAKER"
+  },
+  "contact Home": {
+    "contact-placeholder": "Kontak Customer Service kami untuk Servis & Informasi lebih lanjut"
+  },
+  "About Us Home": {
+    "about-title": "TENTANG KAMI",
+    "about-description-1": "CV. Sinar Baja Electric (SBE) berdiri sejak 1981 yang kini menjadi produsen loudspeaker lokal terbesar di Asia Tenggara. Dengan sertifikasi",
+    "about-description-1-1": "dan",
+    "about-description-1-2": ", SBE fokus pada produk berkualitas tinggi. ACR Speaker merupakan salah satu produk unggulan dari CV. Sinar Baja Electric",
+    "about-description-2": "ACR Speaker terdiri dari speaker tweeter hingga subwoofer yang memiliki berbagai macam ukuran voice coil yang dapat dicocokkan sesuai kebutuhan pengguna. Magnet ferrite dan neodymiumnya dipilih yang paling kokoh dan berkualitas terbaik. ACR Speaker juga menyediakan speaker dari magnet single hingga double magnet yang cocok digunakan oleh masyarakat Indonesia.",
+    "about-button-desc": "TENTANG KAMI"
+  },
+  "Latest News Home": {
+    "latest-news-title": "BERITA TERBARU",
+    "latest-news-date-format": "id-ID",
+    "latest-news-button-desc": "LIHAT ARTIKEL"
+  },
+  "Distributors Home": {
+    "distributors-title-1": "TOKO & DISTRIBUTOR",
+    "distributors-desc-1": "Chanel pembelian speaker ACR bisa diperoleh melalui Toko & Distributor berikut.",
+    "distributors-button-desc-1": "LIST DISTRIBUTOR",
+    "distributors-title-2": "APLIKASI MOBILE",
+    "distributors-desc-2": "List Toko & Distributor. Berita terbaru tersedia di aplikasi MySBE.",
+    "distributors-button-desc-2": "UNDUH",
+    "distributors-title-3": "MEDIA SOSIAL",
+    "distributors-whatsapp-placeholder": "Halo,%20saya%20mau%20bertanya%20mengenai%20produk%20ACR."
+  },
+  "Footer": {
+    "footer-other-brand": "Brand Lain dari CV. Sinar Baja Electric",
+    "footer-factory-1": "Pabrik : Jl. Margomulyo No.5, Surabaya 600186, Jawa Timur, Indonesia,",
+    "footer-factory-2": "Kontak: 031 748 0011",
+    "footer-showroom-1": "Showroom Jakarta: Ruko Glodok Plaza F-97, Jl. Raya Pinangsia 1, Glodok, Tamansari, Jakarta Barat",
+    "footer-showroom-1-contact": "Kontak: 0811 3077 6724",
+    "footer-showroom-2": "Showroom Surabaya: Jl. Genteng Besar No. 15A - Genteng, Surabaya",
+    "footer-showroom-2-contact": "Kontak: 0812 1733 4084",
+    "footer-download-mysbe": "Download Aplikasinya Sekarang!",
+    "footer-download-mysbe-heading": "Unduh Aplikasi MySBE" ,
+    "footer-language-choice": "Pilih Bahasa:"
+  },
+  "All Filters": {
+    "all-filters-compare-list": "LIST PERBANDINGAN",
+    "all-filters-compare-link": "HASIL PERBANDINGAN",
+    "all-filters-clear-filters": "HAPUS FILTER",
+    "all-filters-compare-button": "PERBANDINGAN",
+    "all-filters-compare-full-title": "Tabel Perbandingan Full!",
+    "all-filters-compare-full-description": "Total tidak lebih dari 5",
+    "product-not-found": "Produk tidak ditemukan.",
+    "all-filters-slider-diameter-cone": "Diameter Cone",
+    "all-filters-slider-sensitivity": "Sensitivity",
+    "all-filters-slider-diameter-voice-coil": "Diameter Voice Coil",
+    "all-filters-checkbox-type": "Tipe",
+    "all-filters-checkbox-series": "Seri",
+    "all-filters-checkbox-acr-series": "Seri ACR",
+    "search-not-found": "Produk tidak ditemukan.",
+    "search": "Cari Produk"
+  },
+  "Comparison Page": {
+    "comparison-page-title": "KOMPARASI PRODUK",
+    "comparison-page-respon-frekuensi-foto": "Foto Respon Frekuensi",
+    "comparison-page-drawing_foto": "Foto Drawing Speaker",
+    "comparison-page-impedansi-foto": "Foto Impedansi",
+    "comparison-page-datasheet": "Unduh Manual",
+    "comparison-page-no-product-searchbox": "Produk Tidak Ditemukan",
+    "comparison-page-searchbox-placeholder": "Bandingkan",
+    "comparison-page-breadcrumb": "Komparasi"
+  },
+  "Single Product Page": {
+    "single-product-specification-title": "Spesifikasi",
+    "single-product-specification-coming-soon": "Segera Hadir!",
+    "single-product-features": "Fitur",
+    "single-product-thiele-title": "Parameter Thiele-Small",
+    "single-product-horn": "Spesifikasi Horn",
+    "single-product-ceiling": "Spesifikasi Ceiling",
+    "single-product-button-download-manual": "Unduh Manual",
+    "single-product-diameter-speaker": "Diameter Speaker",
+    "single-product-daya-maksimum": "Daya Maksimum",
+    "single-product-lebar-frekuensi": "Lebar Frekuensi",
+    "single-product-sensitivity": "Sensitivity",
+    "single-product-medan-magnet": "Medan Magnet",
+    "single-product-berat-magnet": "Berat Magnet",
+    "single-product-diameter-voice-coil": "Diameter Voice Coil",
+    "single-product-impedansi": "Impedansi",
+    "single-product-nominal-power-handling": "Nominal Power Handling",
+    "single-product-program-power": "Daya Program",
+    "single-product-material-voice-coil": "Material Voice Coil",
+    "single-product-berat-speaker": "Berat Speaker",
+    "single-product-deskripsi": "Deskripsi",
+    "single-product-isi-per-dus": "Isi / Dus","single-product-button-comparison": "Bandingkan","single-product-button-sparepart": "Sparepart Tersedia"
+  },
+  "Ceiling Table": {
+    "ceiling-table-model": "Model",
+    "ceiling-table-type": "Tipe",
+    "ceiling-table-input": "Input",
+    "ceiling-table-rated-impedance": "Impedansi",
+    "ceiling-table-sensitivity": "Sensitivity",
+    "ceiling-table-frequency-response": "Respon Frekuensi",
+    "ceiling-table-line-voltage": "Tegangan Listrik",
+    "ceiling-table-speaker-component": "Komponen Speaker",
+    "ceiling-table-weight": "Berat",
+    "ceiling-table-material": "Material",
+    "ceiling-table-accessory": "Aksesoris",
+    "ceiling-table-rated-power": "Daya"
+  },
+  "Horn Table": {
+    "horn-table-diameter-throat": "Diameter Throat",
+    "horn-table-ukuran": "Ukuran",
+    "horn-table-material": "Material"
+  },
+  "Thiele Table": {
+    "thiele-table-liters": "liter"
+  },
+  "News Page": {
+    "news-breadcrumb": "Semua Berita",
+    "news-date-format": "id-ID",
+    "news-edit-filters-button": "Edit Filter",
+    "news-filters-title": "Filter",
+    "news-filters-clear-button": "HAPUS FILTER",
+    "news-timestamps-filter-title": "Tempo Waktu",
+    "news-not-found": "Berita tidak ditemukan.",
+    "news-read-article": "BACA ARTIKEL"
+  },
+  "About Us Page": {
+    "about-us-title": "Tentang Kami",
+    "about-us-title-heading": "Speaker Berkualitas Yang Didapat Dari Bahan-Bahan Terbaik",
+    "about-us-desc-1": "ACR Speaker berdiri sejak tahun 1994, dan merupakan salah satu merk driver speaker profesional terbesar di Indonesia. ACR Speaker terdiri dari beberapa kategori, yaitu: Fabulous, Excellent, Premier, Deluxe, hingga produk Hi-Fi. Setiap tipe memiliki ciri khas warna hingga desain yang berbeda-beda. Tipe-tipe tersebut diproduksi melalui proses yang ketat dengan standar internasional sehingga dapat digunakan dalam jangka waktu yang lama oleh masing-masing pengguna.",
+    "about-us-desc-2": "Bersama tagline ACR yaitu <b><i>Moving Ahead To The Future Of Sound</i></b>, kami terus melakukan inovasi pada setiap produk yang ada dengan mengikuti perkembangan teknologi dan kebutuhan zaman. Mendapatkan pengalaman audio yang berkesan pada setiap masyarakat Indonesia adalah salah satu tujuan kami. Kami percaya dengan mempertahankan kualitas maka dunia audio akan terus berkembang menjadi lebih baik.",
+    "about-us-desc-3": "Selain menyediakan produk yang berkualitas, ACR Speaker juga menyediakan jasa servis speaker yang tersedia di pabrik CV. Sinar Baja Electric Surabaya. Tujuan dari servis speaker ini adalah membuat speaker kembali menjadi baru dan melewati quality control yang sama seperti pertama kali membeli. Bagi pelanggan yang ingin servis sendiri, pabrik juga menyediakan voice coil dan recone kit yang dapat dibeli di dealer resmi terdekat."
+  },
+  "Catalogue Page": {
+    "catalogue-title": "Katalog",
+    "catalogue-download-button": "Unduh",
+    "catalogue-chevron-page-1": "Halaman",
+    "catalogue-chevron-page-2": "dari",
+    "catalogue-release-date-1": "Tanggal Publikasi: 10 September 2024",
+    "catalogue-release-date-2": "Tanggal Publikasi: 12 Juli 2024",
+    "catalogue-release-date-3": "Tanggal Publikasi: 22 Mei 2025",
+    "catalogue-release-date-4": "Tanggal Publikasi: 12 Juli 2024",
+    "catalogue-release-date-5": "Tanggal Publikasi: 22 Mei 2025",
+    "catalogue-release-date-6": "Tanggal Publikasi: 10 Maret 2025",
+    "catalogue-loading-1": "Memuat Katalog ACR 2024",
+    "catalogue-loading-2": "Memuat Brosur ACR Original",
+    "catalogue-loading-3": "Memuat Brosur ACR Fabulous Series",
+    "catalogue-loading-4": "Memuat Brosur ACR Series",
+    "catalogue-loading-5": "Memuat Brosur Desibel",
+    "catalogue-loading-6": "Memuat Brosur ACR Black Series",
+    "catalogue-error-1": "Gagal Memuat Katalog ACR 2024",
+    "catalogue-error-2": "Gagal Memuat Brosur ACR Original",
+    "catalogue-error-3": "Gagal Memuat Brosur ACR Fabulous Series",
+    "catalogue-error-4": "Gagal Memuat Brosur ACR Series",
+    "catalogue-error-5": "Gagal Memuat Brosur Desibel",
+    "catalogue-error-6": "Gagal Memuat Brosur ACR Black Series",
+    "catalogue-try-again": "Coba Lagi",
+    "catalogue-title-1": "KATALOG ACR 2024",
+    "catalogue-title-2": "BROSUR ACR ORIGINAL",
+    "catalogue-title-3": "BROSUR ACR FAB SERIES",
+    "catalogue-title-4": "BROSUR ACR SERIES",
+    "catalogue-title-5": "BROSUR DESIBEL",
+    "catalogue-title-6": "BROSUR ACR BLACK SERIES"
+  },
+  "Distributors Page": {
+    "distributors-title": "List Distributor",
+    "distributors-breadcrumb": "Distributor"
+  },
+  "Contact Page": {
+    "contact-title": "Kontak",
+    "contact-jakarta-address" : "Ruko Glodok Plaza F-97, Jl. Raya Pinangsia 1, Glodok, Tamansari, Jakarta Barat"
+  },
+
+  "SEO Metadata JsonLd": {
+    "h3 all product 1": "Semua Produk",
+    "h3 all product 2": "milik ACR Speaker",
+    "jsonLd-description-1": "Seri",
+    "jsonLd-description-2": "Terbaik dari ACR Speaker.",
+    "generateMetadata-description-1": "Semua Seri",
+    "generateMetadata-description-2": "milik ACR Speaker",
+    "generateMetadata-keywords": "milik",
+    "generateMetadata-title-alldrivers": "Semua Driver",
+    "generateMetadata-title-allsparepart": "Semua Sparepart",
+    "generateMetadata-description-alldrivers": "Semua Driver milik ACR Speaker",
+    "generateMetadata-description-allsparepart": "Semua Sparepart milik ACR Speaker",
+    "generateMetadata-description-products": "Temukan Spesifikasi dan Fitur Unggulan dari",
+    "jsonLd-description-products": "Detail Spesifikasi dan Fitur dari",
+    "generateMetadata-title-about-us": "Tentang Kami",
+    "generateMetadata-description-about-us": "Pelajari lebih lanjut tentang ACR Speaker",
+    "generateMetadata-keywords-about-us": "Tentang ACR Speaker",
+    
+    "generateMetadata-title-catalog": "Katalog",
+    "generateMetadata-description-catalog": "Jelajahi Katalog ACR Speaker dan temukan Beragam Speaker Berkualitas Tinggi.",
+    "generateMetadata-keywords-catalog": "Katalog ACR Speaker",
+    
+    "generateMetadata-title-comparison": "Perbandingan Produk",
+    "generateMetadata-description-comparison": "Bandingkan produk ACR Speaker yang telah Anda pilih untuk menemukan pilihan terbaik.",
+
+    "generateMetadata-title-contact": "Kontak",
+    "generateMetadata-description-contact": "Hubungi ACR Speaker untuk informasi lebih lanjut!",
+    "generateMetadata-keywords-contact": "Hubungi ACR Speaker",
+    "generateMetadata-keywords-contact-main-office": "Kantor Utama",
+
+    "generateMetadata-title-distributors": "List Distributor",
+    "generateMetadata-description-distributors": "Chanel pembelian speaker ACR bisa diperoleh melalui Toko & Distributor berikut.",
+    "generateMetadata-keywords-distributors-surabaya": "Distributor Surabaya untuk ACR Speaker",
+    "generateMetadata-keywords-distributors-jakarta": "Distributor Jakarta untuk ACR Speaker",
+    "generateMetadata-keywords-distributors-malang": "Distributor Malang untuk ACR Speaker",
+    "generateMetadata-keywords-distributors-bandung": "Distributor Bandung untuk ACR Speaker",
+    "generateMetadata-keywords-distributors-pati": "Distributor Pati untuk ACR Speaker",
+    "jsonLd-subOrganization-distributors-jatim": "Jawa Timur",
+    "jsonLd-subOrganization-distributors-jateng": "Jawa Tengah",
+    "jsonLd-subOrganization-distributors-jabar": "Jawa Barat",
+
+    "generateMetadata-title-news": "Berita",
+    "generateMetadata-description-news": "Dapatkan berita terbaru dari ACR Speaker! Temukan informasi terkini tentang produk, inovasi, dan acara kami di sini!",
+    "generateMetadata-keywords-news": "Berita dari ACR Speaker",
+
+    "generateMetadata-description-home": "Speaker asli buatan Indonesia produksi dari CV. Sinar Baja Electric, yang menghasilkan speaker berkualitas terbaik dari tweeter hingga subwoofer.",
+    "generateMetadata-keywords-1-home": "Speaker Indonesia",
+    "generateMetadata-keywords-2-home": "Loudspeaker Indonesia",
+
+    "generateMetadata-keywords-not-found-title": "Halaman Tidak Ditemukan",
+    "generateMetadata-keywords-not-found-desc": "Kembali ke homepage"  
+  },
+  
+  "Not Found Page": {
+    "not-found-desc": "Maaf Halaman ini Rusak, boleh kembali ke homepage dulu ya",
+    "not-found-button" : "Kembali ke ACR",
+    "not-found-lang": "id"
+  }
+}
+  

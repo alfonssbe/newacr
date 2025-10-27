@@ -1,0 +1,31 @@
+# Node modules
+node_modules/
+
+# Next.js build output
+.next/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency lock files (choose depending on package manager)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# OS-specific
+.DS_Store
+
+# Vercel
+.vercel
+
+# Optional: output if you export static site
+out/
+
+# Google Analtytics Credentials - Admin Page
+credentials/service-account.json
+
+# env variable
+.env
+.env*
