@@ -1,50 +1,34 @@
 "use client"
-import { CheckBoxData, Products, SliderData } from "@/app/types";
-import getAllProducts from "@/app/actions/get-all-products";
-import { useTranslations } from "next-intl";
+import { CheckBoxData, AllFilterProductsOnlyType, SliderData, ChildSpecificationProp } from "@/app/types";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { Loader } from "@/app/[lang]/components/ui/loader";
 import AllDriversandFiltersProducts from "../components-all-product/all-filters";
-
-function createFilterProps(
-  key: string,
-  name: string,
-  unit: string,
-  filterKey: string,
-) {
-  return { key, name, unit, filterKey };
-}
+import getAllProductsForFilterPage from "@/app/actions/get-all-products-for-filter-page";
 
 function removeDuplicates<RangeSliderFilter>(arr: RangeSliderFilter[]): RangeSliderFilter[] {
   return Array.from(new Set(arr));
 }
+const API=`${process.env.NEXT_PUBLIC_ROOT_URL}/${process.env.NEXT_PUBLIC_FETCH_ALL_PRODUCTS}`;
 
 export default function ProductByCategoryPage() {
-  const t = useTranslations("All Filters")
+  const locale = useLocale()
   const [loading, setLoading] = useState<boolean>(true)
   const [showserver, setShowServer] = useState<boolean>(true)
-  const [allprodserver, setallprodserver] = useState<Products[]>()
+  const [allprodserver, setallprodserver] = useState<AllFilterProductsOnlyType[]>()
   const [sliderRows, setsliderRows] = useState<SliderData[]>([])
   const [checkboxRows, setcheckboxRows] = useState<CheckBoxData[]>([])
   useEffect( () => {
     async function fetchData(){
       try{      
-        const tempData = await getAllProducts();
+        let [tempData, allSpecsCombined]: [AllFilterProductsOnlyType[], Record<string, ChildSpecificationProp[]>] = await getAllProductsForFilterPage(API);
         let sliderRows: SliderData[] = [];
         let checkboxRows: CheckBoxData[] = [];
       
-        let tempSliderLoop = [];
-        let tempCheckboxLoop = [];
         let counterShow = 0;
-        tempSliderLoop.push(
-          createFilterProps('parentSize', t('all-filters-slider-diameter-cone'), 'inch', 'size'),
-          createFilterProps('allSPL', t('all-filters-slider-sensitivity'), 'dB', 'spl'),
-          createFilterProps('allVoiceCoilDiameter',  t('all-filters-slider-diameter-voice-coil'), 'mm', 'voice_coil_diameter'),
-        )
-        tempSliderLoop.map((value) =>{
-          if(value.key==='parentSize'){
-            //@ts-ignore
-            const allValueWithoutDuplicates: number[] = removeDuplicates(tempData.allsizes);
+        for (const key in allSpecsCombined) {
+          if(key !== 'series' && key != "type" && key != "series-acr") {
+            const allValueWithoutDuplicates: number[] = removeDuplicates(allSpecsCombined[key].map((val) => Number(val.value)));
             const allValueWithoutDuplicatesAndNone = allValueWithoutDuplicates.filter(number => !Number.isNaN(number));
             const sortedValues = allValueWithoutDuplicatesAndNone.slice().sort((a, b) => a - b);
             if(sortedValues.length>1){
@@ -52,68 +36,40 @@ export default function ProductByCategoryPage() {
             }
             sliderRows.push(
               {
-                name: value.name, 
+                name: locale === 'id' ? allSpecsCombined[key][0].childnameIndo : allSpecsCombined[key][0].childnameEnglish, 
                 value: sortedValues, 
-                unit: value.unit,
+                unit: allSpecsCombined[key][0].unit,
                 max_index: sortedValues.length - 1,
                 min_index: 0,
                 minIndex: 0,
                 maxIndex: sortedValues.length - 1,
-                slug: value.filterKey
+                slug: key
               },
             )
           }
           else{
-            //@ts-ignore
-            const allValueWithoutDuplicates: number[] = removeDuplicates(tempData.allproduct[value.key]);
-            const allValueWithoutDuplicatesAndNone = allValueWithoutDuplicates.filter(number => !Number.isNaN(number));
-            const sortedValues = allValueWithoutDuplicatesAndNone.slice().sort((a, b) => a - b);
+            const allValueWithoutDuplicates: string[] = removeDuplicates(allSpecsCombined[key].map((val) => val.value));
+            const allValueWithoutDuplicatesAndNone = allValueWithoutDuplicates.filter(number => number != '');
+            const sortedValues = allValueWithoutDuplicatesAndNone.sort()
             if(sortedValues.length>1){
               counterShow+=1
             }
-            sliderRows.push(
+            checkboxRows.push(
               {
-                name: value.name, 
+                name: locale === 'id' ? allSpecsCombined[key][0].childnameIndo : allSpecsCombined[key][0].childnameEnglish, 
                 value: sortedValues, 
-                unit: value.unit,
-                max_index: sortedValues.length - 1,
-                min_index: 0,
-                minIndex: 0,
-                maxIndex: sortedValues.length - 1,
-                slug: value.filterKey
+                unit: allSpecsCombined[key][0].unit,
+                slug: key,
               },
             )
           }
-        })
-      
-        tempCheckboxLoop.push(
-          createFilterProps('allSubCategory', t('all-filters-checkbox-series'), '', 'sub_category'),
-          createFilterProps('allSeries', t('all-filters-checkbox-acr-series'), '', 'series'),
-          createFilterProps('allSubSubCategory', t('all-filters-checkbox-type'), '', 'sub_sub_category'),
-        )
-        tempCheckboxLoop.map((value) =>{
-          //@ts-ignore
-          const allValueWithoutDuplicates: string[] = removeDuplicates(tempData.allproduct[value.key]);
-          const allValueWithoutDuplicatesAndNone = allValueWithoutDuplicates.filter(number => number != '');
-          const sortedValues = allValueWithoutDuplicatesAndNone.sort()
-          if(sortedValues.length>1){
-            counterShow+=1
-          }
-          checkboxRows.push(
-            {
-              name: value.name, 
-              value: sortedValues, 
-              unit: value.unit,
-              slug: value.filterKey,
-            },
-          )
-        })
+        }
       
         if(counterShow===0){
           setShowServer(false)
         }
         
-        setallprodserver(tempData.allproduct.allProducts)
+        setallprodserver(tempData)
         setsliderRows(sliderRows)
         setcheckboxRows(checkboxRows)
         setLoading(false)

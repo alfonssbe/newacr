@@ -4,10 +4,14 @@ import getSubCatNameBySlug from '@/app/actions/get-SubCat_Name';
 import getSubSubCatNameBySlug from '@/app/actions/get-SubSubCat_Name';
 import { getTranslations } from 'next-intl/server';
 import ProductBySubSubCategoryPage from './subSubDriversClient';
+import { AllProductsJsonType } from '@/app/types';
+import getAllProductsJsonld from '@/app/actions/jsonLd/get-all-products-jsonld';
 
 type Props = {
   params: { lang?: string, driversSubCategory?: string, driversSeries?: string, driversSubSubCategory?: string }
 }
+
+const API=`${process.env.NEXT_PUBLIC_ROOT_URL}/${process.env.NEXT_PUBLIC_FETCH_ALL_PRODUCTS_JSON_BY_SUB_SUB_CATEGORY}`;
 
 export default async function ProductBySubSubCategoryPageJsonLd({params}: Props) {
   const { lang = 'id', driversSubCategory = '', driversSeries = '', driversSubSubCategory = '' } = params
@@ -22,7 +26,10 @@ export default async function ProductBySubSubCategoryPageJsonLd({params}: Props)
   const subCatName = subCatNameResult.status === 'fulfilled' ? subCatNameResult.value : { name: '' };
   const seriesName = seriesNameResult.status === 'fulfilled' ? seriesNameResult.value : { name: '' };
   const subSubCatName = subSubCatNameResult.status === 'fulfilled' ? subSubCatNameResult.value : { name: '' };
-  const allprodserver = await getAllProductsBySubSubCategoryJsonld(driversSubCategory, driversSeries, driversSubSubCategory); // SSR fetch
+  const API_EDITED_FIRST = API.replace('{productSubCategory}', driversSubCategory)
+  const API_EDITED_SECOND = API_EDITED_FIRST.replace('{productSeries}', driversSeries)
+  const API_EDITED = API_EDITED_SECOND.replace('{productSubSubCategory}', driversSubSubCategory)
+  const allprodserver : AllProductsJsonType[] = await getAllProductsJsonld(API_EDITED); // SSR fetch
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -30,7 +37,7 @@ export default async function ProductBySubSubCategoryPageJsonLd({params}: Props)
     "url": lang === 'id' ? `${baseUrl}/driver/${driversSubCategory}/${driversSeries}/${driversSubSubCategory}` : `${baseUrl}/${lang}/drivers/${driversSubCategory}/${driversSeries}/${driversSubSubCategory}`, 
     "name": "ACR Speaker",
     "description": `${t('jsonLd-description-1')} ${subCatName?.name} ${seriesName?.name} ${subSubCatName?.name} ${t('jsonLd-description-2')}`,
-    "itemListElement": allprodserver?.map((driver: any, index: number) => ({
+    "itemListElement": allprodserver?.map((driver, index) => ({
       "@type": "ListItem",
       "position": index + 1,
       "item": {
@@ -38,7 +45,7 @@ export default async function ProductBySubSubCategoryPageJsonLd({params}: Props)
         "url": lang === 'id' ? `${baseUrl}/produk/${driver.slug}` : `${baseUrl}/${lang}/products/${driver.slug}`,
         "name": driver.name,
         "description": driver.name,
-        "image": `${baseUrl}${driver.coverUrl}`,
+        "image": `${baseUrl}${driver.cover_img.url}`,
         "sku": driver.slug || driver.id,
         "brand": {
           "@type": "Brand",

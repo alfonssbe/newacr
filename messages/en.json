@@ -103,6 +103,7 @@
     "footer-language-choice": "Select Language:"    
   },
   "All Filters": {
+    "all-filters-lang": "en",
     "all-filters-compare-list": "COMPARISON LIST",
     "all-filters-compare-link": "GO TO COMPARISON",
     "all-filters-clear-filters": "CLEAR FILTERS",

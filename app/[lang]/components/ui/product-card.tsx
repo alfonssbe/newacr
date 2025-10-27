@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { Products } from "@/app/types";
+import { AllFilterProductsOnlyType, AllProductsJsonType, Products } from "@/app/types";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useLocale, useTranslations } from "next-intl";
 import { LazyImageCustom } from "../lazyImageCustom";
 
 interface ReviewCard {
-  data: Products
+  data: AllProductsJsonType
   isSparepart: boolean
 }
 
@@ -22,37 +22,35 @@ const ProductCard: React.FC<ReviewCard> = ({
           <div className="w-full flex items-center justify-center pb-4">
             <LazyImageCustom
               src={`/images/acr/series_logo/${
-                data.series.length!=0 ? 
-                  data.series[0].name === "Black" ? 
+                data && data.allCat.length!=0 && 
+                  data.allCat.find((val) => val.type === 'Series')?.name === "Black" ? 
                     "acr_white_bg.webp"
                   :  
-                  data.series[0].name === "Black Magic" ?
+                  data.allCat.find((val) => val.type === 'Series')?.name === "Black Magic" ?
                     "acr_white_bg.webp"
                   :  
-                  data.series[0].name === "Premier" ?
+                  data.allCat.find((val) => val.type === 'Series')?.name === "Premier" ?
                     "premier_white_bg.webp"
                   :
-                  data.series[0].name === "Excellent" ?
+                  data.allCat.find((val) => val.type === 'Series')?.name === "Excellent" ?
                     "excellent_white_bg.webp"
                   :
-                  data.series[0].name === "Deluxe" ?
+                  data.allCat.find((val) => val.type === 'Series')?.name === "Deluxe" ?
                     "deluxe_white_bg.webp"
                   :
-                  data.series[0].name === "Classic" ?
+                  data.allCat.find((val) => val.type === 'Series')?.name === "Classic" ?
                     "acr_white_bg.webp"
                   :
-                  data.series[0].name === "Fabulous" ?
+                  data.allCat.find((val) => val.type === 'Series')?.name === "Fabulous" ?
                     "fabulous_white_bg.webp"
                   :
-                  data.series[0].name === "Pro" ?
-                    "acr_white_bg.webp"
-                  :
+                  data.allCat.find((val) => val.type === 'Series')?.name === "Pro" ?
                     "acr_white_bg.webp"
                 :
-                data.sub_categories.find((subcat) =>  subcat.name === "Curve") ?
+                data.allCat.find((val) => val.type === 'Sub Category' && val.name === 'Curve') ?
                     "curve_white_bg.webp"
                 :
-                data.sub_categories.find((subcat) =>  subcat.name === "Desibel") ?
+                data.allCat.find((val) => val.type === 'Sub Category' && val.name === 'Desibel') ?
                     "desibel_white_bg.webp"
                 :
                     "acr_white_bg.webp"
@@ -67,12 +65,12 @@ const ProductCard: React.FC<ReviewCard> = ({
           </div>
         </div>
         <h3 className="text-lg lg:text-3xl font-bold text-center text-black line-clamp-1">{data.name}</h3>
-        <h4 className="text-sm text-black lg:text-base text-center font-light line-clamp-1">{data.size.label != '-' && data.size.value.toString().concat(" inch ")}{data.sub_sub_categories.length > 0 && data.sub_sub_categories[0].name}{data.series.length>0 && " - ".concat(data.series[0].name, " Series")}</h4>
+        <h4 className="text-sm text-black lg:text-base text-center font-light line-clamp-1">{data.allCat.find((val) => val.type === 'Sub Sub Category')?.name} - {data.allCat.find((val) => val.type === 'Series')?.name}</h4>
       {isSparepart ? 
         <div className="grid grid-cols-1 w-full py-4 gap-2">
           <div className="flex items-center h-auto">
             <LazyImageCustom
-              src={data.coverUrl.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${data.coverUrl}` : data.coverUrl} 
+              src={data.cover_img.url.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${data.cover_img.url}` : data.cover_img.url} 
               alt={data.name} 
               width={500}
               height={500}
@@ -90,7 +88,7 @@ const ProductCard: React.FC<ReviewCard> = ({
         <div className="grid grid-cols-2 w-full py-4 gap-2">
           <div className="flex items-center h-auto">
             <LazyImageCustom
-              src={data.coverUrl.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${data.coverUrl}` : data.coverUrl} 
+              src={data.cover_img.url.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${data.cover_img.url}` : data.cover_img.url} 
               alt={data.name} 
               width={500}
               height={500}
@@ -98,11 +96,28 @@ const ProductCard: React.FC<ReviewCard> = ({
               lazy={false}
             />
           </div>   
-          <div className="w-full min-h-[160px] bg-transparent rounded-md p-2">
-            <div className="text-sm text-black lg:text-base font-light pt-2"><h4 className=" line-clamp-1">{t('sensitivity-spec')}</h4><h5 className="font-semibold">{data.specification.spl && data.specification.spl != "" ? data.specification.spl.concat(" dB") : "-"}</h5></div>
-            <div className="text-sm text-black lg:text-base font-light pt-2"><h4 className=" line-clamp-1">{t('impedansi-spec')}</h4><h5 className="font-semibold">{data.specification.impedansi && data.specification.impedansi != "" ? data.specification.impedansi.concat(" Ω") : "-"}</h5></div>
-            <div className="text-sm text-black lg:text-base font-light pt-2"><h4 className=" line-clamp-1">{t('program-power-spec')}</h4><h5 className="font-semibold">{data.specification.program_power && data.specification.program_power != "" ? data.specification.program_power.concat(" W") : "-"}</h5></div>
-          </div>
+          {/* <div className="w-full min-h-[160px] bg-transparent rounded-md p-2">
+            <div className="text-sm text-black lg:text-base font-light pt-2">
+              <h4 className=" line-clamp-1">
+                {t('sensitivity-spec')}
+              </h4>
+              <h5 className="font-semibold">
+                {data.specs.find((val) => val.slugEnglish === 'sensitivity')?.value ?? '-'} 
+              </h5>
+            </div>
+            <div className="text-sm text-black lg:text-base font-light pt-2">
+              <h4 className=" line-clamp-1">{t('impedansi-spec')}</h4>
+              <h5 className="font-semibold">
+                {data.specs.find((val) => val.slugEnglish === 'impedance')?.value ?? '-'} 
+              </h5>
+            </div>
+            <div className="text-sm text-black lg:text-base font-light pt-2">
+              <h4 className=" line-clamp-1">{t('program-power-spec')}</h4>
+              <h5 className="font-semibold">
+                {data.specs.find((val) => val.slugEnglish === 'program-power')?.value ?? '-'} 
+              </h5>
+            </div>
+          </div> */}
         </div>
       }
       

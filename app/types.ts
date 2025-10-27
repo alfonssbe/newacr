@@ -295,9 +295,11 @@ export interface SpecificationProp {
 }
 
 export interface ChildSpecificationProp {
-  childname: string
+  childnameIndo: string
+  childnameEnglish: string
   value: string
-  slug: string
+  slugIndo: string
+  slugEnglish: string
   notes: string
   unit: string
 }
@@ -321,4 +323,27 @@ export interface FilesProp{
     name: string
     url: string
     productId: string
+}
+
+export interface AllProductsJsonType {
+  name: string
+  id: string
+  slug: string
+  cover_img: {
+    url: string
+  }
+  allCat: {
+    name: string
+    slug: string
+    type: string
+  }[]
+};
+
+export interface AllFilterProductsOnlyType {
+  products: AllProductsJsonType
+  size: {
+    name: string
+    value: string
+  },
+  specs: ChildSpecificationProp[]
 }

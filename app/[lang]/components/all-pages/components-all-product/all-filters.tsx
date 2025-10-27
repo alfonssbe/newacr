@@ -1,6 +1,6 @@
 "use client";
 
-import { activeCheckbox, activeSlider, CheckBoxData, Products, Searchbox, SliderData } from "@/app/types";
+import { activeCheckbox, activeSlider, CheckBoxData, AllFilterProductsOnlyType, Searchbox, SliderData } from "@/app/types";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/app/[lang]/components/ui/sheet";
@@ -33,7 +33,7 @@ type SliderSheetValue = {
   };
 
 interface MainProps {
-  data: (Products)[];
+  data: (AllFilterProductsOnlyType)[];
   slider: (SliderData)[]
   checkbox: (CheckBoxData)[]
   showFilters: (boolean)
@@ -42,6 +42,7 @@ interface MainProps {
 const AllDriversandFiltersProducts: React.FC<MainProps> = ({
   data, slider, checkbox, showFilters
 }) => {
+    console.log("data: ", data)
     const t = useTranslations('All Filters');
     const [allActiveSlider, setAllActiveSlider] = useState<activeSlider[]>([])  
     const [allActiveCheckbox, setAllActiveCheckbox] = useState<activeCheckbox[]>([])  
@@ -49,7 +50,7 @@ const AllDriversandFiltersProducts: React.FC<MainProps> = ({
     const [sheetOpenedForSlider, setSheetOpenedForSlider] = useState<boolean>(false)  
     const [reseted, setReseted] = useState<string>('false')
     const [isLgScreen, setIsLgScreen] = useState(false);
-    const [allFeaturedProducts, setAllFeaturedProducts] = useState<Products[]>([])
+    const [allFeaturedProducts, setAllFeaturedProducts] = useState<AllFilterProductsOnlyType[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const [finalPathname, setfinalPathname] = useState<string[]>([])
 
@@ -91,7 +92,6 @@ const AllDriversandFiltersProducts: React.FC<MainProps> = ({
                         value: value.value
                     })
                 });
-                // console.log("tempSlider: ", tempSlider)
                 setSliderValue(tempSlider)
                 setLoadingSlider(false);
             } catch (error) {
@@ -121,27 +121,19 @@ const AllDriversandFiltersProducts: React.FC<MainProps> = ({
         const fetchDataSearchbox = async () => {
             try {
                 let data_Final : Searchbox[] = []
-                data.map((value) => {
+                data.map((value: AllFilterProductsOnlyType) => {
+                    
                     let tempName = ""
-                    value.categories.length > 0 && value.categories.map((valCat) => {
-                        tempName += valCat.name + " ";
-                    })
-                    value.sub_categories.length > 0 && value.sub_categories.map((valCat) => {
-                        tempName += valCat.name + " ";
-                    })
-                    value.series.length > 0 && value.series.map((valCat) => {
-                        tempName += valCat.name + " ";
-                    })
-                    value.sub_sub_categories.length > 0 && value.sub_sub_categories.map((valCat) => {
+                    value.products.allCat && value.products.allCat.length > 0 && value.products.allCat.map((valCat) => {
                         tempName += valCat.name + " ";
                     })
 
-                    const normalizedStr = value.name.replace(/["“”‟″‶〃״˝ʺ˶ˮײ]/g, ' inch');
+                    const normalizedStr = value.products.name.replace(/["“”‟″‶〃״˝ʺ˶ˮײ]/g, ' inch');
                     let combined_val = normalizedStr.concat(" ", tempName)
 
 
-                    const hasValidSize = value.size.label !== '' && value.size.label !== "-";
-                    const seriesName = value.series.length > 0 && value.series[0].name;
+                    const hasValidSize = value.size.value !== '' && value.size.name !== "-";
+                    const seriesName = value.products.allCat.find(cat => cat.type === 'Series')?.name;
                     let finalDesc = '';
                     if (hasValidSize) {
                         finalDesc += `${value.size.value.toString()} inch`;
@@ -155,9 +147,9 @@ const AllDriversandFiltersProducts: React.FC<MainProps> = ({
 
                     data_Final.push({
                         value: combined_val,
-                        label: value.name,
-                        slug: value.slug,
-                        url: value.coverUrl,
+                        label: value.products.name,
+                        slug: value.products.slug,
+                        url: value.products.cover_img.url,
                         categoryDetails: finalDesc
                     })
                 })
@@ -323,9 +315,9 @@ const AllDriversandFiltersProducts: React.FC<MainProps> = ({
     useEffect(() => {
         const fetchData = async () => {
           try {
-            let finishedSliderProducts: Products[] = []
-            let finishedCheckboxProducts: Products[] = []
-            let tempShowed: Products[][] = [];
+            let finishedSliderProducts: AllFilterProductsOnlyType[] = []
+            let finishedCheckboxProducts: AllFilterProductsOnlyType[] = []
+            let tempShowed: AllFilterProductsOnlyType[][] = [];
             if (allActiveSlider.length !== 0) {
                 allActiveSlider.forEach((slider, indexslider) => {
                     if (!tempShowed[indexslider]) {
@@ -338,8 +330,7 @@ const AllDriversandFiltersProducts: React.FC<MainProps> = ({
                                 productValue = Number(product.size.value)
                             }
                             else{
-                                //@ts-ignore
-                                productValue = Number(product.specification[slider.slug]);
+                                productValue = Number(product.specs.find((val) => val.slugEnglish === slider.slug)?.value);
                             }
                             const bottomValue = Number(slider.bottomRealVal);
                             const topValue = Number(slider.topRealVal);
@@ -355,8 +346,7 @@ const AllDriversandFiltersProducts: React.FC<MainProps> = ({
                                 productValue = Number(product.size.value)
                             }
                             else{
-                                //@ts-ignore
-                                productValue = Number(product.specification[slider.slug]);
+                                productValue = Number(product.specs.find((val) => val.slugEnglish === slider.slug)?.value);
                             }
                             const bottomValue = Number(slider.bottomRealVal);
                             const topValue = Number(slider.topRealVal);
@@ -373,7 +363,7 @@ const AllDriversandFiltersProducts: React.FC<MainProps> = ({
             }
 
             if (allActiveCheckbox.length !== 0) {
-                let finalTempProduct: Record<string, Products[]> = {};
+                let finalTempProduct: Record<string, AllFilterProductsOnlyType[]> = {};
                 let checkboxCategories: string[] = [];
 
                 allActiveCheckbox.forEach((checkbox) => {
@@ -386,27 +376,22 @@ const AllDriversandFiltersProducts: React.FC<MainProps> = ({
                     if (!finalTempProduct[category]) {
                         finalTempProduct[category] = [];
                     }
+
+
                     data.forEach((product) => {
                         let productValue = undefined
                         if(checkbox.slug === 'series'){
-                            productValue = product.series.find(
-                                (item) => item.name.toLowerCase() === checkbox.name.toLowerCase()
-                            )?.name;
+                            productValue = product.products.allCat.find((val) => val.type === 'Sub Category' && val.name.toLowerCase() === checkbox.name.toLowerCase())?.name ?? undefined;
                         }
-                        else if(checkbox.slug === 'sub_category'){
-                            productValue = product.sub_categories.find(
-                                (item) => item.name.toLowerCase() === checkbox.name.toLowerCase()
-                            )?.name;
+                        else if(checkbox.slug === 'type'){
+                            productValue = product.products.allCat.find((val) => val.type === 'Sub Sub Category' && val.name.toLowerCase() === checkbox.name.toLowerCase())?.name ?? undefined;
                         }
-                        else{
-                            productValue = product.sub_sub_categories.find(
-                                (item) => item.name.toLowerCase() === checkbox.name.toLowerCase()
-                            )?.name;
+                        else if(checkbox.slug === 'series-acr'){
+                            productValue = product.products.allCat.find((val) => val.type === 'Series' && val.name.toLowerCase() === checkbox.name.toLowerCase())?.name ?? undefined;
                         }
 
                         if (productValue != undefined) {
-                            const productExists = finalTempProduct[category].some(item => item.name === product.name);
-
+                            const productExists = finalTempProduct[category].some(item => item.products.name === product.products.name);
                             if (!productExists) {
                                 finalTempProduct[category].push(product);
                             }
@@ -414,20 +399,22 @@ const AllDriversandFiltersProducts: React.FC<MainProps> = ({
                     });
                 });
 
-                let tempFinished: Products[] = [];
+                
+
+                let tempFinished: AllFilterProductsOnlyType[] = [];
                 let productCountMap = new Map<string, number>();
 
                 checkboxCategories.map((category, indexcategory) => {
                     finalTempProduct[category].map((product) => {
                         tempFinished.push(product);
-                        const count = productCountMap.get(product.name) || 0;
-                        productCountMap.set(product.name, count + 1);
+                        const count = productCountMap.get(product.products.name) || 0;
+                        productCountMap.set(product.products.name, count + 1);
                     });
                 });
 
                 productCountMap.forEach((count, productName) => {
                     if (count === checkboxCategories.length) {
-                        const product = tempFinished.find(p => p.name === productName);
+                        const product = tempFinished.find(p => p.products.name === productName);
                         if (product) {
                             finishedCheckboxProducts.push(product);
                         }
@@ -438,16 +425,16 @@ const AllDriversandFiltersProducts: React.FC<MainProps> = ({
                 finishedCheckboxProducts = data
             }
 
-            let FinalFeatured: Products[] = []
+            let FinalFeatured: AllFilterProductsOnlyType[] = []
             for (const checkboxproducts of finishedCheckboxProducts) {
                 for (const sliderproducts of finishedSliderProducts) {
-                    if(checkboxproducts.name === sliderproducts.name){
+                    if(checkboxproducts.products.name === sliderproducts.products.name){
                         FinalFeatured.push(sliderproducts)
                         break
                     }
                 }
             }
-            FinalFeatured.sort((a, b) => a.name.localeCompare(b.name));
+            FinalFeatured.sort((a, b) => a.products.name.localeCompare(b.products.name));
 
             setAllFeaturedProducts(FinalFeatured)
             setLoading(false)
@@ -925,7 +912,6 @@ const AllDriversandFiltersProducts: React.FC<MainProps> = ({
                             opensheetvalmax={
                                 (defaultSliderSheet && defaultSliderSheet.find(tempVal => tempVal.slug === value.slug)?.value.max) ?? 0
                             }
-                            //@ts-ignore
                             resetclicked={reseted}
                             onValueChange={(val) => {handleSliderChange(value.slug, val, value.min_index, value.max_index, value.value, value.name, value.unit), setCurrentPage(1)}}
                             className={cn("w-full py-2")}
@@ -1131,7 +1117,6 @@ const AllDriversandFiltersProducts: React.FC<MainProps> = ({
                                     opensheetvalmax={
                                         (defaultSliderSheet && defaultSliderSheet.find(tempVal => tempVal.slug === value.slug)?.value.max) ?? 0
                                     }
-                                    //@ts-ignore
                                     resetclicked={reseted}
                                     onValueChange={(val) => {handleSliderChange(value.slug, val, value.min_index, value.max_index, value.value, value.name, value.unit), setCurrentPage(1)}}
                                     className={cn("w-full py-2")}
@@ -1176,9 +1161,9 @@ const AllDriversandFiltersProducts: React.FC<MainProps> = ({
                 :
                     <div className={`block w-full ${showFilters && 'xl:pl-20 lg:pl-12 pl-0'}`}>
                     <div className="grid grid-cols-1 sm:grid-cols-2 w-full gap-4">
-                        {paginatedItems.map((item: Products, i) => (
+                        {paginatedItems.map((item: AllFilterProductsOnlyType, i) => (
                             <div key={i}>
-                                <ProductCard key={item.id} data={item} isSparepart={segmentedPathname[2] === 'spareparts' || segmentedPathname[2] === 'sparepart'} />
+                                <ProductCard key={item.products.id} data={item.products} isSparepart={segmentedPathname[2] === 'spareparts' || segmentedPathname[2] === 'sparepart'} />
                                
                             </div>
                         ))}
