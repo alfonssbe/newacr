@@ -102,7 +102,7 @@ export async function GET(
       const products = await prismadb.product.findMany({
         where: {
           id : {
-            in: finalProductIds
+            in: finalProductIdsFix
           },
           isArchived: false
         },

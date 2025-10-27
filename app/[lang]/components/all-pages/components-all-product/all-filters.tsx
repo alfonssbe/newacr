@@ -42,7 +42,6 @@ interface MainProps {
 const AllDriversandFiltersProducts: React.FC<MainProps> = ({
   data, slider, checkbox, showFilters
 }) => {
-    console.log("data: ", data)
     const t = useTranslations('All Filters');
     const [allActiveSlider, setAllActiveSlider] = useState<activeSlider[]>([])  
     const [allActiveCheckbox, setAllActiveCheckbox] = useState<activeCheckbox[]>([])  
