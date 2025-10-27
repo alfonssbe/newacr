@@ -1,17 +1,9 @@
-import { AllCategory, AllProductsForHome, CachedAllProducts, Products, Size, Specifications, SubCategoryFilters } from "@/app/types";
+import { AllCategory, AllProductsForHome, AllProductsJsonType, CachedAllProducts, Products, Size, Specifications, SubCategoryFilters } from "@/app/types";
 import { redirect } from "next/navigation";
 
 const API=`${process.env.NEXT_PUBLIC_ROOT_URL}/${process.env.NEXT_PUBLIC_FETCH_ALL_PRODUCTS_BY_SUB_CATEGORY}`;
 
-const getAllProductsBySubCategoryJsonld = async (subcategory: string): Promise<Products[]> => {
-  let allProducts: Array<Products> = []
-
-  let size = {} as Size;
-  let parentSize: Array<number> = []
-  
-  let allSubSubCategory: Array<string> = []
-  let allSubCategory: Array<string> = []
-  let allSeries: Array<string> = []
+const getAllProductsBySubCategoryJsonld = async (subcategory: string): Promise<AllProductsJsonType[]> => {
 
   const API_EDITED = API.replace('{productSubCategory}', subcategory)
   const response = await fetch(API_EDITED, {cache: "no-store"});
