@@ -8,12 +8,12 @@ import 'swiper/css/pagination';
 
 // import required modules
 import { FreeMode, Navigation, Pagination } from 'swiper/modules';
-import { Products } from '@/app/types';
+import { AllFilterProductsOnlyType } from '@/app/types';
 import ProductCard from './product-card';
 import { useEffect, useRef, useState } from 'react';
 
 interface SwiperCarouselNewsProps {
-  featured: Products[];
+  featured: AllFilterProductsOnlyType[];
 }
 
 export default function SwiperCarouselNewProduct({ featured }: SwiperCarouselNewsProps) {
@@ -71,7 +71,7 @@ export default function SwiperCarouselNewProduct({ featured }: SwiperCarouselNew
     >
       {featured.map((value, index) => (
         <SwiperSlide key={index} className='p-2 pb-4'>
-          <ProductCard data={value} isSparepart={false}/>
+          <ProductCard data={value.products} isSparepart={false}/>
         </SwiperSlide>
       ))}
     </Swiper>

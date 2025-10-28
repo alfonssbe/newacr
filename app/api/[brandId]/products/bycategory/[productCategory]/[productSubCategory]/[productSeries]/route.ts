@@ -5,21 +5,25 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   req: Request,
-  props: { params: Promise<{ productSubCategory: string, productSeries: string, productSubSubCategory: string }> }
+  props: { params: Promise<{ productCategory: string, productSubCategory: string, productSeries: string }> }
 ) {
   const params = await props.params;
   try {
+    if (!params.productCategory) {
+      return new NextResponse("Product Category is required", { status: 400 });
+    }
+
     if (!params.productSubCategory) {
       return new NextResponse("Product Sub Category is required", { status: 400 });
     }
-    
-    if (!params.productSeries) {
-        return new NextResponse("Product Series is required", { status: 400 });
-      }
 
-    if (!params.productSubSubCategory) {
-      return new NextResponse("Product Sub Sub Category is required", { status: 400 });
+    if (!params.productSeries) {
+      return new NextResponse("Product Series is required", { status: 400 });
     }
+
+    console.log("category: ", params.productCategory)
+    console.log("sub category: ", params.productSubCategory)
+    console.log("series: ", params.productSeries)
     
     const productIdbySubCat =  await prismadb.allProductCategory.findMany({
       where:{
@@ -37,7 +41,7 @@ export async function GET(
       where:{
           slug: params.productSeries,
           type: {
-            in: ['Series']
+            in: ['Series', 'Sub Sub Category']
           }
       },
       select:{
@@ -48,22 +52,6 @@ export async function GET(
     const productIdsSubSubCat = productIdbySubSeriesCat.map((value) => value.productId)
 
     const finalProductIds = productIdsSubCat.filter(id => productIdsSubSubCat.includes(id));
-
-    const productIdbySubSubCat =  await prismadb.allProductCategory.findMany({
-      where:{
-          slug: params.productSubSubCategory,
-          type: {
-            in: ['Sub Sub Category']
-          }
-      },
-      select:{
-          productId: true
-      }
-    })
-
-    const productIdsSubSubSubCat = productIdbySubSubCat.map((value) => value.productId)
-
-    const finalProductIdsFix = finalProductIds.filter(id => productIdsSubSubSubCat.includes(id));
 
     let neededSpec = allproductsSubSubCat
       const allTypes = await prismadb.allCategory.findMany({
@@ -102,7 +90,13 @@ export async function GET(
       const products = await prismadb.product.findMany({
         where: {
           id : {
-            in: finalProductIdsFix
+            in: finalProductIds
+          },
+          allCat: {
+            some: {
+              type: 'Category',
+              slug: params.productCategory === 'drivers' || params.productCategory === 'driver' ? 'drivers' : 'spareparts'
+            }
           },
           isArchived: false
         },

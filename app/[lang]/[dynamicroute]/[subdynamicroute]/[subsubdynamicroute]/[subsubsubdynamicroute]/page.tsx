@@ -1,5 +1,4 @@
 import ProductBySubSubCategoryPageJsonLd from "@/app/[lang]/components/all-pages/all-drivers/subDrivers/seriesDrivers/subSubDrivers/subSubDrivers";
-import SparepartBySubSubCategoryPageJsonLd from "@/app/[lang]/components/all-pages/all-spareparts/subSpareparts/seriesSpareparts/subSubSpareparts/subSubSpareparts";
 
 export default async function RoutePage({
   params,
@@ -10,10 +9,9 @@ export default async function RoutePage({
   switch (slug) {
     case 'drivers':
     case 'driver':
-      return <ProductBySubSubCategoryPageJsonLd params={{ lang, driversSubCategory: subslug, driversSeries: subsubseries, driversSubSubCategory: subsubsubslug }} />;
     case 'spareparts':
     case 'sparepart':
-      return <SparepartBySubSubCategoryPageJsonLd params={{ lang, sparepartSubCategory: subslug, sparepartSeries: subsubseries, sparepartSubSubCategory: subsubsubslug }} />;
+      return <ProductBySubSubCategoryPageJsonLd params={{ lang, driverCategory: slug, driversSubCategory: subslug, driversSeries: subsubseries, driversSubSubCategory: subsubsubslug }} />
     default:
       <></>
   }

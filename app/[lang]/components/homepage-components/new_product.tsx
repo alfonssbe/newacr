@@ -1,6 +1,6 @@
 "use client";
 
-import { Products } from "@/app/types";
+import { AllFilterProductsOnlyType } from "@/app/types";
 import { Loader } from "@/app/[lang]/components/ui/loader";
 import { useEffect, useState } from "react";
 import SwiperCarouselNewProduct from "@/app/[lang]/components/ui/swipercarouselnewproduct";
@@ -9,13 +9,13 @@ import { useTranslations } from "next-intl";
 
 const NewProduct: React.FC = () => {
   const [loading, setLoading] = useState(true);
-  const [value, setValue] = useState<Products[]>([]);
+  const [value, setValue] = useState<AllFilterProductsOnlyType[]>([]);
   const t = useTranslations('New Product Home');
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const featuredData: Products[] = await getAllFeaturedProducts();
+        const featuredData: AllFilterProductsOnlyType[] = await getAllFeaturedProducts();
         setValue(featuredData);
       } catch (error) {
         console.error('Error fetching featured products:', error);

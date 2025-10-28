@@ -5,16 +5,17 @@ import getAllProductsJsonld from "@/app/actions/jsonLd/get-all-products-jsonld";
 import { AllProductsJsonType } from "@/app/types";
 
 type Props = {
-  params: { lang?: string, driversSubCategory?: string }
+  params: { lang?: string, driverCategory?: string, driversSubCategory?: string }
 }
 
 const API=`${process.env.NEXT_PUBLIC_ROOT_URL}/${process.env.NEXT_PUBLIC_FETCH_ALL_PRODUCTS_JSON_BY_SUB_CATEGORY}`;
 
 export default async function ProductBySubCategoryPageJsonLd({params}: Props) {    
-  const { lang = 'id', driversSubCategory = '' } = params;
+  const { lang = 'id', driverCategory = '', driversSubCategory = '' } = params;
   const t = await getTranslations({ locale: lang, namespace: 'SEO Metadata JsonLd' });
   const baseUrl = process.env.NEXT_PUBLIC_ROOT_URL ?? 'http://localhost:3002';
-  const API_EDITED = API.replace('{productSubCategory}', driversSubCategory)
+  const API_EDITED_NOTFIX = API.replace('{productSubCategory}', driversSubCategory)
+  const API_EDITED = API_EDITED_NOTFIX.replace('{productCategory}', driverCategory)
   const [subCatNameResult] = await Promise.allSettled([
     getSubCatNameBySlug(driversSubCategory),
   ]);
@@ -25,7 +26,7 @@ export default async function ProductBySubCategoryPageJsonLd({params}: Props) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "url": lang === 'id' ? `${baseUrl}/driver/${driversSubCategory}` : `${baseUrl}/${lang}/drivers/${driversSubCategory}`, 
+    "url": lang === 'id' ? `${baseUrl}/${driverCategory}/${driversSubCategory}` : `${baseUrl}/${lang}/${driverCategory}/${driversSubCategory}`, 
     "name": "ACR Speaker",
     "description": `${t('jsonLd-description-1')} ${subCatName?.name} ${t('jsonLd-description-2')}`,
     "itemListElement": allprodserver?.map((driver: AllProductsJsonType, index: number) => ({

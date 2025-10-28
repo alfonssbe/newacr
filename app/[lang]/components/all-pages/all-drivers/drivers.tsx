@@ -4,23 +4,23 @@ import ProductByCategoryPage from "./driversClient";
 import { AllProductsJsonType } from "@/app/types";
 
 type Props = {
-  params: { lang?: string };
+  params: { lang?: string, driverCategory?: string };
 };
 
 const API=`${process.env.NEXT_PUBLIC_ROOT_URL}/${process.env.NEXT_PUBLIC_FETCH_ALL_PRODUCTS_JSON}`;
 
 export default async function ProductByCategoryPageJsonLd({ params }: Props) {
-  const { lang = 'id' } = params;
+  const { lang = 'id', driverCategory = '' } = params;
   const t = await getTranslations({ locale: lang, namespace: 'SEO Metadata JsonLd' });
   const baseUrl = process.env.NEXT_PUBLIC_ROOT_URL ?? 'http://localhost:3002';
-  const allprodserver : AllProductsJsonType[] = await getAllProductsJsonld(API);
-  console.log(allprodserver)
+  const API_EDITED = API.replace('{productCategory}', driverCategory)
+  const allprodserver : AllProductsJsonType[] = await getAllProductsJsonld(API_EDITED);
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "url": lang === 'id' ? `${baseUrl}/driver` : `${baseUrl}/${lang}/drivers`,
+    "url": lang === 'id' ? `${baseUrl}/${driverCategory}` : `${baseUrl}/${lang}/${driverCategory}`,
     "name": "ACR Speaker",
-    "description": `${t('generateMetadata-description-alldrivers')}`,
+    "description": driverCategory === 'driver' || driverCategory === 'drivers' ? `${t('generateMetadata-description-alldrivers')}` : `${t('generateMetadata-description-allsparepart')}`,
     "itemListElement": allprodserver && allprodserver.map((driver: AllProductsJsonType, index) => ({
       "@type": "ListItem",
       "position": index + 1,
@@ -45,7 +45,7 @@ export default async function ProductByCategoryPageJsonLd({ params }: Props) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <ProductByCategoryPage/>
+        <ProductByCategoryPage params={params}/>
     </>
   );
 }

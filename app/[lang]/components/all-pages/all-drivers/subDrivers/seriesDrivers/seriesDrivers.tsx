@@ -1,4 +1,3 @@
-import getAllProductsBySeriesJsonld from '@/app/actions/jsonLd/get-all-products-by-series-jsonld';
 import getSubCatNameBySlug from '@/app/actions/get-SubCat_Name';
 import getSeriesNameBySlug from '@/app/actions/get-Series_Name';
 import getSubSubCatNameBySlug from '@/app/actions/get-SubSubCat_Name';
@@ -8,17 +7,18 @@ import { AllProductsJsonType } from '@/app/types';
 import getAllProductsJsonld from '@/app/actions/jsonLd/get-all-products-jsonld';
 
 type Props = {
-  params: { lang?: string, driversSubCategory?: string, driversSeries?: string }
+  params: { lang?: string, driverCategory?: string, driversSubCategory?: string, driversSeries?: string }
 }
 
 const API=`${process.env.NEXT_PUBLIC_ROOT_URL}/${process.env.NEXT_PUBLIC_FETCH_ALL_PRODUCTS_JSON_BY_SERIES}`;
 
 export default async function ProductBySeriesPageJsonLd({params}: Props) {
-  const { lang = 'id', driversSubCategory = '', driversSeries = '' } = params;
+  const { lang = 'id', driverCategory = '', driversSubCategory = '', driversSeries = '' } = params;
   const t = await getTranslations({ locale: lang, namespace: 'SEO Metadata JsonLd' });
   const baseUrl = process.env.NEXT_PUBLIC_ROOT_URL ?? 'http://localhost:3002';
   const API_EDITED_FIRST = API.replace('{productSubCategory}', driversSubCategory)
-  const API_EDITED = API_EDITED_FIRST.replace('{productSeries}', driversSeries)
+  const API_EDITED_NOTFIX = API_EDITED_FIRST.replace('{productSeries}', driversSeries)
+  const API_EDITED = API_EDITED_NOTFIX.replace('{productCategory}', driverCategory)
   const [subCatNameResult, seriesNameResult] = await Promise.allSettled([
     getSubCatNameBySlug(driversSubCategory),
     driversSubCategory === 'acr' ? getSeriesNameBySlug(driversSeries) : getSubSubCatNameBySlug(driversSeries)
@@ -31,7 +31,7 @@ export default async function ProductBySeriesPageJsonLd({params}: Props) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",    
-    "url": lang === 'id' ? `${baseUrl}/driver/${driversSubCategory}/${driversSeries}` : `${baseUrl}/${lang}/drivers/${driversSubCategory}/${driversSeries}`, 
+    "url": lang === 'id' ? `${baseUrl}/${driverCategory}/${driversSubCategory}/${driversSeries}` : `${baseUrl}/${lang}/${driverCategory}/${driversSubCategory}/${driversSeries}`, 
     "name": "ACR Speaker",
     "description": `${t('jsonLd-description-1')} ${subCatName?.name} ${seriesName?.name} ${t('jsonLd-description-2')}`,
     "itemListElement": allprodserver?.map((driver, index) => ({

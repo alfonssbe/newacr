@@ -5,9 +5,10 @@ interface Props {
   spec: SpecificationProp[];
   styling: string;
   stylingTitle: string;
+  locale: string
 }
 
-export default function SpecificationTable({ spec, styling, stylingTitle }: Props) {
+export default function SpecificationTable({ spec, styling, stylingTitle, locale }: Props) {
   let counter = 1
   let allNotesNonNull: string[] = []
   let allAdditionalNotes: string[] = []
@@ -24,7 +25,7 @@ export default function SpecificationTable({ spec, styling, stylingTitle }: Prop
       {Object.entries(groupedByParent).map(([parentName, subGroups]) => {
         // Step 2: Collect all unique childnames
         const allChildren = Array.from(
-          new Set(subGroups.flatMap((sub) => sub.child.map((c) => c.childname)))
+          new Set(subGroups.flatMap((sub) => sub.child.map((c) => (locale === 'en' ? c.childnameEnglish : c.childnameIndo))))
         );
 
         //For all notes
@@ -70,7 +71,7 @@ export default function SpecificationTable({ spec, styling, stylingTitle }: Prop
                       )}
                     </TableCell>
                     {subGroups.map((sub, subIdx) => {
-                      const foundChild = sub.child.find((c) => c.childname === childName);
+                      const foundChild = sub.child.find((c) => (locale === 'en' ? c.childnameEnglish : c.childnameIndo) === childName);
                       const value =
                         foundChild && foundChild.value && foundChild.value.trim() !== ''
                           ? `${foundChild.value} ${foundChild.unit || ''}`

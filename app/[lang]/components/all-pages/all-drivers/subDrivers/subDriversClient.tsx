@@ -1,6 +1,5 @@
 "use client"
 import { AllFilterProductsOnlyType, CheckBoxData, ChildSpecificationProp, SliderData } from "@/app/types";
-import getAllProductsBySubCategory from "@/app/actions/get-all-products-by-sub-category";
 import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Loader } from "@/app/[lang]/components/ui/loader";
@@ -8,7 +7,7 @@ import AllDriversandFiltersProducts from "../../components-all-product/all-filte
 import getAllProductsForFilterPage from "@/app/actions/get-all-products-for-filter-page";
 
 type Props = {
-  params: { driversSubCategory?: string }
+  params: { driverCategory?: string, driversSubCategory?: string }
 }
 
 const API=`${process.env.NEXT_PUBLIC_ROOT_URL}/${process.env.NEXT_PUBLIC_FETCH_ALL_PRODUCTS_BY_SUB_CATEGORY}`;
@@ -27,9 +26,9 @@ export default function ProductBySubCategoryPage(props: Props) {
         useEffect( () => {
           async function fetchData(){
             try{
-              const { driversSubCategory = '' } = await props.params;
-              const API_EDITED = API.replace('{productSubCategory}', driversSubCategory)
-              
+              const { driverCategory = '', driversSubCategory = '' } = await props.params;
+              const API_EDITED_NOTFIX = API.replace('{productSubCategory}', driversSubCategory)   
+              const API_EDITED = API_EDITED_NOTFIX.replace('{productCategory}', driverCategory)
               let [tempData, allSpecsCombined]: [AllFilterProductsOnlyType[], Record<string, ChildSpecificationProp[]>] = await getAllProductsForFilterPage(API_EDITED);
               let sliderRows: SliderData[] = [];
               let checkboxRows: CheckBoxData[] = [];

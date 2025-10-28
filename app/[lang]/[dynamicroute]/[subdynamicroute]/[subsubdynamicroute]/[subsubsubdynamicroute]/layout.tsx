@@ -5,9 +5,7 @@ import { getTranslations } from "next-intl/server";
 import getSeriesNameBySlug from "@/app/actions/get-Series_Name";
 import getSubSubCatNameBySlug from "@/app/actions/get-SubSubCat_Name";
 import ProductBySubSubCatLayout from "@/app/[lang]/components/all-layout/all-drivers/subDrivers/seriesDrivers/subSubDrivers/subSubDriversLayout";
-import SparepartBySubSubCatLayout from "@/app/[lang]/components/all-layout/all-spareparts/subSpareparts/seriesSpareparts/subSubSpareparts/subSubSparepartsLayout";
 import NotFound from "@/app/[lang]/components/all-pages/not-found";
-import { allLocalesSubSubSubDrivers } from "@/lib/gsp_var";
 
 // export const revalidate = 86400
 // export async function generateStaticParams() {
@@ -175,10 +173,9 @@ export default async function RouteLayout({
   switch (slug) {
     case 'drivers':
     case 'driver':
-      return <ProductBySubSubCatLayout>{children}</ProductBySubSubCatLayout>;
     case 'spareparts':
     case 'sparepart':
-      return <SparepartBySubSubCatLayout>{children}</SparepartBySubSubCatLayout>;
+      return <ProductBySubSubCatLayout>{children}</ProductBySubSubCatLayout>;
     default:
       return <NotFound/>
   }

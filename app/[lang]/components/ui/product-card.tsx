@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { AllFilterProductsOnlyType, AllProductsJsonType, Products } from "@/app/types";
-import Image from "next/image";
+import { AllProductsJsonType } from "@/app/types";
 import { Button } from "@/components/ui/button";
 import { useLocale, useTranslations } from "next-intl";
 import { LazyImageCustom } from "../lazyImageCustom";
@@ -93,30 +92,31 @@ const ProductCard: React.FC<ReviewCard> = ({
               lazy={false}
             />
           </div>   
-          <div className="w-full min-h-[160px] bg-transparent rounded-md p-2">
+          {/* <div className="w-full min-h-[160px] bg-transparent rounded-md p-2">
             <div className="text-sm text-black lg:text-base font-light pt-2"><h4 className=" line-clamp-1">{t('sensitivity-spec')}</h4>
-              <h5 className="font-semibold">
-                {data.spec.sensitivity ? 
-                  data.spec.sensitivity.value != "-" && data.spec.sensitivity.value != "" && <>{data.spec.sensitivity.value} {data.spec.sensitivity.unit}</>
-                :
-                <>-</>} 
-              </h5></div>
-            <div className="text-sm text-black lg:text-base font-light pt-2"><h4 className=" line-clamp-1">{t('impedansi-spec')}</h4>
-              <h5 className="font-semibold">
-                {data.spec.impedance ? 
-                  data.spec.impedance.value != "-" && data.spec.impedance.value != "" && <>{data.spec.impedance.value} {data.spec.impedance.unit}</>
-                :
-                <>-</>}
-                </h5></div>
-            <div className="text-sm text-black lg:text-base font-light pt-2"><h4 className=" line-clamp-1">{t('program-power-spec')}</h4>
-              <h5 className="font-semibold">
-                {data.spec.programpower ? 
-                  data.spec.programpower.value != "-" && data.spec.programpower.value != "" && <>{data.spec.programpower.value} {data.spec.programpower.unit}</>
-                :
-                <>-</>} 
-              </h5>
+              {data.spec.sensitivity ? 
+              data.spec.sensitivity.value != "-" && data.spec.sensitivity.value != "" && 
+                <h5 className="font-semibold">
+                  {data.spec.sensitivity.value} {data.spec.sensitivity.unit}
+                </h5>
+              :
+                <>-</>
+              } 
             </div>
-          </div>
+            <div className="text-sm text-black lg:text-base font-light pt-2"><h4 className=" line-clamp-1">{t('impedansi-spec')}</h4>
+            
+              {data.spec.impedance ? 
+                data.spec.impedance.value != "-" && data.spec.impedance.value != "" && <h5 className="font-semibold">{data.spec.impedance.value} {data.spec.impedance.unit}</h5>
+              :
+              <>-</>}
+            </div>
+            <div className="text-sm text-black lg:text-base font-light pt-2"><h4 className=" line-clamp-1">{t('program-power-spec')}</h4>
+            {data.spec.programpower ? 
+              data.spec.programpower.value != "-" && data.spec.programpower.value != "" && <h5 className="font-semibold">{data.spec.programpower.value} {data.spec.programpower.unit}</h5>
+            :
+            <>-</>}        
+            </div>
+          </div> */}
         </div>
         :
         <div className="grid grid-cols-2 w-full py-4 gap-2">
@@ -135,30 +135,32 @@ const ProductCard: React.FC<ReviewCard> = ({
               <h4 className=" line-clamp-1">
                 {t('sensitivity-spec')}
               </h4>
-              <h5 className="font-semibold">
-                {data.spec.sensitivity ? 
-                  data.spec.sensitivity.value != "-" && data.spec.sensitivity.value != "" && <>{data.spec.sensitivity.value} {data.spec.sensitivity.unit}</>
-                :
-                <>-</>} 
-              </h5>
+              {data.spec.sensitivity ? 
+              data.spec.sensitivity.value != "-" && data.spec.sensitivity.value != "" && 
+                <h5 className="font-semibold line-clamp-1">
+                  {data.spec.sensitivity.value} {data.spec.sensitivity.unit}
+                </h5>
+              :
+                <>-</>
+              } 
             </div>
             <div className="text-sm text-black lg:text-base font-light pt-2">
               <h4 className=" line-clamp-1">{t('impedansi-spec')}</h4>
-              <h5 className="font-semibold">
-                {data.spec.impedance ? 
-                  data.spec.impedance.value != "-" && data.spec.impedance.value != "" && <>{data.spec.impedance.value} {data.spec.impedance.unit}</>
-                :
-                <>-</>} 
-              </h5>
+              
+              {data.spec.impedance ? 
+                data.spec.impedance.value != "-" && data.spec.impedance.value != "" && <h5 className="font-semibold line-clamp-1">{data.spec.impedance.value} {data.spec.impedance.unit}</h5>
+              :
+              <>-</>} 
+              
             </div>
             <div className="text-sm text-black lg:text-base font-light pt-2">
               <h4 className=" line-clamp-1">{t('program-power-spec')}</h4>
-              <h5 className="font-semibold">
-                {data.spec.programpower ? 
-                  data.spec.programpower.value != "-" && data.spec.programpower.value != "" && <>{data.spec.programpower.value} {data.spec.programpower.unit}</>
-                :
-                <>-</>} 
-              </h5>
+              
+              {data.spec.programpower ? 
+                data.spec.programpower.value != "-" && data.spec.programpower.value != "" && <h5 className="font-semibold">{data.spec.programpower.value} {data.spec.programpower.unit}</h5>
+              :
+              <>-</>} 
+              
             </div>
           </div>
         </div>

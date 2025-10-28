@@ -6,12 +6,16 @@ import { Loader } from "@/app/[lang]/components/ui/loader";
 import AllDriversandFiltersProducts from "../components-all-product/all-filters";
 import getAllProductsForFilterPage from "@/app/actions/get-all-products-for-filter-page";
 
+type Props = {
+  params: { driverCategory?: string }
+}
+
 function removeDuplicates<RangeSliderFilter>(arr: RangeSliderFilter[]): RangeSliderFilter[] {
   return Array.from(new Set(arr));
 }
 const API=`${process.env.NEXT_PUBLIC_ROOT_URL}/${process.env.NEXT_PUBLIC_FETCH_ALL_PRODUCTS}`;
 
-export default function ProductByCategoryPage() {
+export default function ProductByCategoryPage(props: Props) {
   const locale = useLocale()
   const [loading, setLoading] = useState<boolean>(true)
   const [showserver, setShowServer] = useState<boolean>(true)
@@ -21,7 +25,9 @@ export default function ProductByCategoryPage() {
   useEffect( () => {
     async function fetchData(){
       try{      
-        let [tempData, allSpecsCombined]: [AllFilterProductsOnlyType[], Record<string, ChildSpecificationProp[]>] = await getAllProductsForFilterPage(API);
+        const { driverCategory = '' } = await props.params;
+        const API_EDITED = API.replace('{productCategory}', driverCategory)
+        let [tempData, allSpecsCombined]: [AllFilterProductsOnlyType[], Record<string, ChildSpecificationProp[]>] = await getAllProductsForFilterPage(API_EDITED);
         let sliderRows: SliderData[] = [];
         let checkboxRows: CheckBoxData[] = [];
       

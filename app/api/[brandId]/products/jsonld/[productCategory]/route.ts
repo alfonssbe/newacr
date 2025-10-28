@@ -2,9 +2,14 @@ import prismadb from "@/lib/prismadb";
 import { NextResponse } from "next/server";
 
 export async function GET(
-    req: Request,
+    req: Request, props: { params: Promise<{ productCategory: string }> }
   ) {
+  const params = await props.params;
     try {
+      if (!params.productCategory) {
+        return new NextResponse("Product Category is required", { status: 400 });
+      }
+    
       const product = await prismadb.product.findMany({
         select: {
           id: true,
@@ -28,7 +33,7 @@ export async function GET(
           allCat: {
             some: {
               type: 'Category',
-              name: 'Drivers'
+              slug: params.productCategory === 'drivers' || params.productCategory === 'driver' ? 'drivers' : 'spareparts'
             }
           }
         }

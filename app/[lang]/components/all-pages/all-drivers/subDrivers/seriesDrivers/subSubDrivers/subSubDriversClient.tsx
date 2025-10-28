@@ -1,15 +1,14 @@
 "use client"
 import { AllFilterProductsOnlyType, CheckBoxData, ChildSpecificationProp, SliderData } from '@/app/types';
-import getAllProductsBySubSubCategory from '@/app/actions/get-all-products-by-sub-sub-category';
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { Loader } from '@/app/[lang]/components/ui/loader';
 import AllDriversandFiltersProducts from '../../../../components-all-product/all-filters';
 import getAllProductsForFilterPage from '@/app/actions/get-all-products-for-filter-page';
-type Props = {
-  params: { driversSubCategory?: string, driversSeries?: string, driversSubSubCategory?: string }
-}
 
+type Props = {
+  params: { driverCategory?: string, driversSubCategory?: string, driversSeries?: string, driversSubSubCategory?: string }
+}
 
 const API=`${process.env.NEXT_PUBLIC_ROOT_URL}/${process.env.NEXT_PUBLIC_FETCH_ALL_PRODUCTS_BY_SUB_SUB_CATEGORY}`;
 
@@ -27,10 +26,11 @@ export default function ProductBySubSubCategoryPage(props: Props) {
   useEffect( () => {
     async function fetchData(){
       try{
-        const { driversSubCategory = '',  driversSeries = '', driversSubSubCategory = '' } = await props.params;
+        const { driverCategory = '', driversSubCategory = '',  driversSeries = '', driversSubSubCategory = '' } = await props.params;
         const API_EDITED_FIRST = API.replace('{productSubCategory}', driversSubCategory)
         const API_EDITED_SECOND = API_EDITED_FIRST.replace('{productSeries}', driversSeries)
-        const API_EDITED = API_EDITED_SECOND.replace('{productSubSubCategory}', driversSubSubCategory)
+        const API_EDITED_NOTFIX = API_EDITED_SECOND.replace('{productSubSubCategory}', driversSubSubCategory)
+        const API_EDITED = API_EDITED_NOTFIX.replace('{productCategory}', driverCategory)
         let [tempData, allSpecsCombined]: [AllFilterProductsOnlyType[], Record<string, ChildSpecificationProp[]>] = await getAllProductsForFilterPage(API_EDITED);
         let sliderRows: SliderData[] = [];
         let checkboxRows: CheckBoxData[] = [];

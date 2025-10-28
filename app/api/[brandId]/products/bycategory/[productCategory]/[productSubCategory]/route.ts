@@ -3,9 +3,13 @@ import { allproductsSubCat } from "@/app/utils/filterPageProps";
 import prismadb from "@/lib/prismadb";
 import { NextResponse } from "next/server";
 
-export async function GET(req: Request, props: { params: Promise<{ productSubCategory: string }> }) {
+export async function GET(req: Request, props: { params: Promise<{ productCategory: string, productSubCategory: string }> }) {
   const params = await props.params;
   try {
+    if (!params.productCategory) {
+      return new NextResponse("Product Category is required", { status: 400 });
+    }
+    
     if (!params.productSubCategory) {
       return new NextResponse("Product Sub Category is required", { status: 400 });
     }
@@ -62,6 +66,12 @@ export async function GET(req: Request, props: { params: Promise<{ productSubCat
         where: {
           id : {
             in: productIds
+          },
+          allCat: {
+            some: {
+              type: 'Category',
+              slug: params.productCategory === 'drivers' || params.productCategory === 'driver' ? 'drivers' : 'spareparts'
+            }
           },
           isArchived: false
         },

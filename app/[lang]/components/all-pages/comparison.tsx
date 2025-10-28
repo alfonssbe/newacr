@@ -30,7 +30,7 @@ function createData(
     return { name, attribute, unit };
 }
 
-function groupAllSpecifications(products: SingleProducts[]) {
+function groupAllSpecifications(products: SingleProducts[], locale: string) {
   const grouped: Record<string, Record<string, Record<string, string>>> = {};
 
   products.forEach((product) => {
@@ -42,8 +42,8 @@ function groupAllSpecifications(products: SingleProducts[]) {
       if (!grouped[parent][sub]) grouped[parent][sub] = {};
 
       spec.child.map((child) => {
-        if (!grouped[parent][sub][child.childname]) {
-          grouped[parent][sub][child.childname] = child.childname;
+        if (!grouped[parent][sub][locale === 'en' ? child.childnameEnglish : child.childnameIndo]) {
+          grouped[parent][sub][locale === 'en' ? child.childnameEnglish : child.childnameIndo] = (locale === 'en' ? child.childnameEnglish : child.childnameIndo);
         }
       });
     });
@@ -62,7 +62,6 @@ const ComparisonPage = () => {
     const [loading, setLoading] = useState<boolean>(true)
     const [searchboxData, setSearchboxData] = useState<Searchbox[]>([])
     const [activeHover, setActiveHover] = useState<number>()
-    const [activeHoverTS, setActiveHoverTS] = useState<number>()
     
     const scrollContainerRef = useRef<HTMLDivElement>(null)
     const [isDragging, setIsDragging] = useState(false)
@@ -183,7 +182,7 @@ const ComparisonPage = () => {
             const data : Searchbox[] = await getProductsForSearchbox();
             setSearchboxData(data)
             setFinalFetchedProduct(tempAllProduct)
-            setAllSpecsUsed(groupAllSpecifications(tempAllProduct))
+            setAllSpecsUsed(groupAllSpecifications(tempAllProduct , locale))
             setLoading(false)
         }
         fetchData()
@@ -560,14 +559,14 @@ const ComparisonPage = () => {
                                             spec.parentname === parentKey &&
                                             spec.subparentname === subKey &&
                                             spec.child.some(
-                                            (subval) => subval.childname === childKey
+                                            (subval) => (locale === 'en' ? subval.childnameEnglish : subval.childnameIndo) === childKey
                                             )
                                         );
 
                                         const matchedChild = foundChild?.child.find(
-                                        (subval) => subval.childname === childKey
+                                        (subval) => (locale === 'en' ? subval.childnameEnglish : subval.childnameIndo) === childKey
                                         );
-
+                                        
                                         const value = matchedChild?.value ?? "-";
                                         const unit = matchedChild?.unit ?? "";
 
@@ -589,12 +588,12 @@ const ComparisonPage = () => {
                                             spec.parentname === parentKey &&
                                             spec.subparentname === subKey &&
                                             spec.child.some(
-                                            (subval) => subval.childname === childKey
+                                            (subval) => (locale === 'en' ? subval.childnameEnglish : subval.childnameIndo) === childKey
                                             )
                                         );
 
                                         const matchedChild = foundChild?.child.find(
-                                        (subval) => subval.childname === childKey
+                                        (subval) => (locale === 'en' ? subval.childnameEnglish : subval.childnameIndo) === childKey
                                         );
 
                                         const value = matchedChild?.value ?? "-";
@@ -618,12 +617,12 @@ const ComparisonPage = () => {
                                             spec.parentname === parentKey &&
                                             spec.subparentname === subKey &&
                                             spec.child.some(
-                                            (subval) => subval.childname === childKey
+                                            (subval) => (locale === 'en' ? subval.childnameEnglish : subval.childnameIndo) === childKey
                                             )
                                         );
 
                                         const matchedChild = foundChild?.child.find(
-                                        (subval) => subval.childname === childKey
+                                        (subval) => (locale === 'en' ? subval.childnameEnglish : subval.childnameIndo) === childKey
                                         );
 
                                         const value = matchedChild?.value ?? "-";

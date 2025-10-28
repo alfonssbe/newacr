@@ -5,7 +5,6 @@ import { getTranslations } from "next-intl/server";
 import getSeriesNameBySlug from "@/app/actions/get-Series_Name";
 import getSubSubCatNameBySlug from "@/app/actions/get-SubSubCat_Name";
 import ProductBySeriesLayout from "@/app/[lang]/components/all-layout/all-drivers/subDrivers/seriesDrivers/seriesDriversLayout";
-import SparepartBySeriesLayout from "@/app/[lang]/components/all-layout/all-spareparts/subSpareparts/seriesSpareparts/seriesSparepartsLayout";
 import NotFound from "@/app/[lang]/components/all-pages/not-found";
 import { allLocalesSubSubDrivers } from "@/lib/gsp_var";
 
@@ -170,10 +169,9 @@ export default async function RouteLayout({
   switch (slug) {
     case 'drivers':
     case 'driver':
-      return <ProductBySeriesLayout>{children}</ProductBySeriesLayout>;
     case 'spareparts':
     case 'sparepart':
-      return <SparepartBySeriesLayout>{children}</SparepartBySeriesLayout>;
+      return <ProductBySeriesLayout>{children}</ProductBySeriesLayout>;
     default:
       return <NotFound />
   }

@@ -1,9 +1,13 @@
 import prismadb from "@/lib/prismadb";
 import { NextResponse } from "next/server";
 
-export async function GET(req: Request, props: { params: Promise<{ productSubCategory: string }> }) {
+export async function GET(req: Request, props: { params: Promise<{ productCategory: string, productSubCategory: string }> }) {
   const params = await props.params;
   try {
+    
+    if (!params.productCategory) {
+      return new NextResponse("Product Category is required", { status: 400 });
+    }
     if (!params.productSubCategory) {
       return new NextResponse("Product Sub Category is required", { status: 400 });
     }
@@ -48,7 +52,7 @@ export async function GET(req: Request, props: { params: Promise<{ productSubCat
           allCat: {
             some: {
               type: 'Category',
-              name: 'Drivers'
+              slug: params.productCategory === 'drivers' || params.productCategory === 'driver' ? 'drivers' : 'spareparts'
             }
           }
         }

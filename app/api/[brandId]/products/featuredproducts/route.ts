@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 
 import prismadb from '@/lib/prismadb';
+import { allCardFeaturedProduct } from '@/app/utils/filterPageProps';
 
 export async function GET(req: Request, props: { params: Promise<{ brandId: string }> }) {
   const params = await props.params;
@@ -10,24 +11,35 @@ export async function GET(req: Request, props: { params: Promise<{ brandId: stri
       return new NextResponse("brand id is required", { status: 400 });
     }
 
-    const products = await prismadb.product.findMany({
+    let neededSpec = allCardFeaturedProduct
+
+    const allSpecsNeeded = await prismadb.dynamicspecification.findMany({
+      where: {
+        slugEnglish: {
+          in : neededSpec.map((val) => val)
+        }
+      },
       select: {
-        id: true,
-        slug: true,
-        name: true,
+        id: true
+      }
+    })
+
+    const products = await prismadb.product.findMany({
+      where: {
+        isArchived: false,
+        isFeatured: true
+      },
+      include: {
         allCat: {
-          select:{
-            type: true,
-            id: true,
-            name: true,
-            slug: true
-          }
-        },
-        specification: {
+          where: {
+            type: {
+              in: ['Sub Category', 'Sub Sub Category', 'Series']
+            }
+          },
           select: {
-            spl: true,
-            impedansi: true,
-            program_power: true,
+            name: true,
+            slug: true,
+            type: true
           }
         },
         cover_img: {
@@ -37,15 +49,28 @@ export async function GET(req: Request, props: { params: Promise<{ brandId: stri
         },
         size: {
           select: {
-            value: true,
-            name: true
+            name: true,
+            value: true
           }
         },
-      },
-      where:{
-        isArchived: false,
-        brandId: params.brandId,
-        isFeatured: true
+        connectorSpecifications: {
+          where: {
+            dynamicspecificationId: {
+              in: allSpecsNeeded.map((val) => val.id)
+            }
+          },
+          include: {
+            dynamicspecification: {
+              select: {
+                nameIndo: true,
+                slugIndo: true,
+                nameEnglish: true,
+                slugEnglish: true,
+                unit: true,
+              }
+            }
+          }
+        }
       }
     });
 

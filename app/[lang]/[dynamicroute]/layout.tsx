@@ -8,7 +8,6 @@ import AllProductLayout from "../components/all-layout/all-product-layout";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import AllDriversLayout from "../components/all-layout/all-drivers/driversLayout";
-import AllSparepartLayout from "../components/all-layout/all-spareparts/sparepartsLayout";
 import NotFound from "../components/all-pages/not-found";
 import { allLocalesRoutes } from "@/lib/gsp_var";
 
@@ -459,10 +458,9 @@ export default async function RouteLayout({
       return <NewsLayout>{children}</NewsLayout>;
     case 'drivers':
     case 'driver':
-      return <AllProductLayout><AllDriversLayout>{children}</AllDriversLayout></AllProductLayout>;
     case 'spareparts':
     case 'sparepart':
-      return <AllProductLayout><AllSparepartLayout>{children}</AllSparepartLayout></AllProductLayout>;
+      return <AllProductLayout><AllDriversLayout>{children}</AllDriversLayout></AllProductLayout>;
     default:
       return <NotFound />
   }

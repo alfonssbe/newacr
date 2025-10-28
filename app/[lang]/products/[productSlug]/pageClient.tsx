@@ -185,7 +185,7 @@ export default function SingleProduct(props: Props) {
 
                             {data.specification && data.specification.length > 0 &&
                                 <div className="justify-start pt-4">
-                                    <SpecificationTable spec={data.specification} styling={all_desc_style} stylingTitle={all_sub_title_style}/>
+                                    <SpecificationTable spec={data.specification} styling={all_desc_style} stylingTitle={all_sub_title_style} locale={locale}/>
                                 </div>
                             }
                         </div>

@@ -25,3 +25,9 @@ export const allproductsSubSubCat = [
   'sensitivity',
   'voice-coil-diameter',
 ]
+
+export const allCardFeaturedProduct = [
+  'sensitivity',
+  'impedance',
+  'program-power',
+]

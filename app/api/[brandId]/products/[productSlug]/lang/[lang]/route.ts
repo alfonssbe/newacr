@@ -42,10 +42,12 @@ export async function GET(req: Request, props: { params: Promise<{ lang: string,
           const subparentname = params.lang === 'en' ? connector.dynamicspecificationSubParent?.nameEnglish ?? "": connector.dynamicspecificationSubParent?.nameIndo ?? "";
 
           const child: ChildSpecificationProp = {
-            childname: params.lang === 'en' ? connector.dynamicspecification?.nameEnglish ?? "" : connector.dynamicspecification?.nameIndo ?? "",
+            childnameEnglish: connector.dynamicspecification?.nameEnglish ?? "",
+            childnameIndo: connector.dynamicspecification?.nameIndo ?? "",
             value: connector.value ?? "",
             notes: connector.notes ?? "",
-            slug: params.lang === 'en' ? connector.dynamicspecification?.slugEnglish ?? "" : connector.dynamicspecification?.slugIndo ?? "",
+            slugEnglish: connector.dynamicspecification?.slugEnglish ?? "",
+            slugIndo : connector.dynamicspecification?.slugIndo ?? "",
             unit: connector.dynamicspecification?.unit ?? "",
           };
 
@@ -106,8 +108,8 @@ export async function GET(req: Request, props: { params: Promise<{ lang: string,
       // ✅ Sort children inside each group by their own priority
       specsCombined.forEach((group) => {
         group.child.sort((a, b) => {
-          const aPriority = Number(childPriorityMap.get(a.childname)) ?? 0;
-          const bPriority = Number(childPriorityMap.get(b.childname)) ?? 0;
+          const aPriority = Number(childPriorityMap.get(params.lang === 'en' ? a.childnameEnglish : a.childnameIndo)) ?? 0;
+          const bPriority = Number(childPriorityMap.get(params.lang === 'en' ? b.childnameEnglish : b.childnameIndo)) ?? 0;
           return aPriority - bPriority;
         });
       });

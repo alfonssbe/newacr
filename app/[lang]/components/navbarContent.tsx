@@ -1670,27 +1670,13 @@ function NavbarContent (){
           setACRPremierTweeterubSubMenu(tempACRPremierTweeter)
           setDesibelNoneTweeterSubSubMenu(tempDesibelNoneTweeter)
 
-          setACRProSparepartSubSubMenu([...tempACRProSparepart, ...tempACRBlackSparepart, ...tempACRBlackMagicSparepart, ...tempACRClassicSparepart].sort((a, b) => {
-              const getFirstWord = (title: string) => title.split(' ')[0].replace(/"/g, '');
-              const isNumber = (word: string) => !isNaN(parseFloat(word));
-              const wordA = getFirstWord(a.title);
-              const wordB = getFirstWord(b.title);
-              const isNumA = isNumber(wordA);
-              const isNumB = isNumber(wordB);
-              if (isNumA && isNumB) {
-                return parseFloat(wordA) - parseFloat(wordB);
-              }
-              if (!isNumA && !isNumB) {
-                return wordA.localeCompare(wordB);
-              }
-              return isNumA ? -1 : 1;
-          }))
-          setACRBlackSparepartSubSubMenu([])
-          setACRBlackMagicSparepartSubSubMenu([])
+          setACRProSparepartSubSubMenu(tempACRProSparepart)
+          setACRBlackSparepartSubSubMenu(tempACRBlackSparepart)
+          setACRBlackMagicSparepartSubSubMenu(tempACRBlackMagicSparepart)
           setACRFabulousSparepartSubSubMenu(tempACRFabulousSparepart)
           setACRExcellentSparepartSubSubMenu(tempACRExcellentSparepart)
           setACRDeluxeSparepartSubSubMenu(tempACRDeluxeSparepart)
-          setACRClassicSparepartSubSubMenu([])
+          setACRClassicSparepartSubSubMenu(tempACRClassicSparepart)
           setCurveNoneSparepartSubSubMenu(tempCurveNoneSparepart)
           setACRPremierSparepartubSubMenu(tempACRPremierSparepart)
           setDesibelNoneSparepartSubSubMenu(tempDesibelNoneSparepart)

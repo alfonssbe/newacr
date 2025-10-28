@@ -1,51 +1,17 @@
 import { ChildSpecificationProp } from "@/app/types";
-import { allproductsSubSubCat } from "@/app/utils/filterPageProps";
+import { allproducts } from "@/app/utils/filterPageProps";
 import prismadb from "@/lib/prismadb";
 import { NextResponse } from "next/server";
 
 export async function GET(
-  req: Request,
-  props: { params: Promise<{ productSubCategory: string, productSeries: string }> }
-) {
-  const params = await props.params;
-  try {
-    if (!params.productSubCategory) {
-      return new NextResponse("Product Sub Category is required", { status: 400 });
-    }
-
-    if (!params.productSeries) {
-      return new NextResponse("Product Series is required", { status: 400 });
-    }
-    
-    const productIdbySubCat =  await prismadb.allProductCategory.findMany({
-      where:{
-          slug: params.productSubCategory,
-          type: 'Sub Category'
-      },
-      select:{
-          productId: true
+    req: Request, props: { params: Promise<{ productCategory: string }> }
+  ) {
+    const params = await props.params;
+    try {
+      if (!params.productCategory) {
+        return new NextResponse("Product Category is required", { status: 400 });
       }
-    })
-
-    const productIdsSubCat = productIdbySubCat.map((value) => value.productId)
-
-    const productIdbySubSeriesCat =  await prismadb.allProductCategory.findMany({
-      where:{
-          slug: params.productSeries,
-          type: {
-            in: ['Series', 'Sub Sub Category']
-          }
-      },
-      select:{
-          productId: true
-      }
-    })
-
-    const productIdsSubSubCat = productIdbySubSeriesCat.map((value) => value.productId)
-
-    const finalProductIds = productIdsSubCat.filter(id => productIdsSubSubCat.includes(id));
-
-    let neededSpec = allproductsSubSubCat
+      let neededSpec = allproducts
       const allTypes = await prismadb.allCategory.findMany({
         where: {
           type: 'Sub Sub Category'
@@ -81,10 +47,13 @@ export async function GET(
       // if(params.brandId === process.env.NEXT_PUBLIC_SB_AUDIENCE_ID) {     
       const products = await prismadb.product.findMany({
         where: {
-          id : {
-            in: finalProductIds
+          isArchived: false,
+          allCat: {
+            some: {
+              type: 'Category',
+              slug: params.productCategory === 'drivers' || params.productCategory === 'driver' ? 'drivers' : 'spareparts'
+            }
           },
-          isArchived: false
         },
         include: {
           allCat: {
@@ -214,8 +183,8 @@ export async function GET(
         products,
         allSpecsCombined
       });
-  } catch (error) {
-    console.log('[PRODUCT_BY_SUB_SUB_CATEGORY_GET]', error);
-    return new NextResponse("Internal error", { status: 500 });
-  }
-};
+    } catch (error) {
+      console.log('[ALL_PRODUCT_GET]', error);
+      return new NextResponse("Internal error", { status: 500 });
+    }
+  };

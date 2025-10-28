@@ -5,11 +5,7 @@ import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import SingleNewsLayout from "../../components/all-layout/single-news/single-news-layout";
 import AllSubDriversLayout from "../../components/all-layout/all-drivers/subDrivers/subDriversLayout";
-import SparepartBySubCategoryLayout from "../../components/all-layout/all-spareparts/subSpareparts/subSparepartsLayout";
 import NotFound from "../../components/all-pages/not-found";
-import getAllProductsGSP from "@/app/actions/get-all-products-for-gsp";
-import getAllNewsGSP from "@/app/actions/get-all-news-for-gsp";
-import { allLocalesSubDrivers } from "@/lib/gsp_var";
 
 // export const revalidate = 86400
 // export async function generateStaticParams() {
@@ -317,13 +313,9 @@ export default async function RouteLayout({
       return <SingleNewsLayout>{children}</SingleNewsLayout>;
     case 'drivers':
     case 'driver':
-      return <AllSubDriversLayout>{children}</AllSubDriversLayout>;
     case 'spareparts':
     case 'sparepart':
-      return <SparepartBySubCategoryLayout>{children}</SparepartBySubCategoryLayout>;
-    // case 'products':
-    // case 'produk':
-    //   return <AllProductLayout><SingleProductLayout>{children}</SingleProductLayout></AllProductLayout>;
+      return <AllSubDriversLayout>{children}</AllSubDriversLayout>;
     default:
       return <NotFound />
   }

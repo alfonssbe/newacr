@@ -4,7 +4,6 @@ import ContactUsJsonLd from '../components/all-pages/contact';
 import ComparisonPage from '../components/all-pages/comparison';
 import Distributors from '../components/all-pages/distributors';
 import NewsJsonLd from '../components/all-pages/all-news/news';
-import SparepartByCategoryPageJsonLd from '../components/all-pages/all-spareparts/spareparts';
 import ProductByCategoryPageJsonLd from '../components/all-pages/all-drivers/drivers';
 
 export default async function RoutePage({
@@ -36,10 +35,9 @@ export default async function RoutePage({
       return <NewsJsonLd params={{ lang }} />;
     case 'drivers':
     case 'driver':
-      return <ProductByCategoryPageJsonLd params={{ lang }} />;
     case 'spareparts':
     case 'sparepart':
-      return <SparepartByCategoryPageJsonLd params={{ lang }} />;
+      return <ProductByCategoryPageJsonLd params={{ lang, driverCategory: slug }} />;
     default:
       <></>;
   }
