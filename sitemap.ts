@@ -2,62 +2,54 @@ import { MetadataRoute } from "next";
 import "dotenv/config"; // Load .env.local variables
 import { writeFile } from "fs/promises";
 import path from "path";
+import { AllProductsJsonType } from "./app/types";
 
-// Fetch your dynamic URLs (from a database, API, or local data)
-async function getProductsDynamicUrls() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_ROOT_URL}/${process.env.NEXT_PUBLIC_FETCH_ALL_PRODUCTS}`);
-  const products = await res.json();
-  const idUrls = products.map((product: { slug: string }) => ({
-    url: `${process.env.NEXT_PUBLIC_ROOT_URL}/produk/${product.slug}`,
-    lastModified: new Date().toISOString(),
-    alternates: {
-        languages: {
-          id: `${process.env.NEXT_PUBLIC_ROOT_URL}/produk/${product.slug}`,
-          en: `${process.env.NEXT_PUBLIC_ROOT_URL}/en/products/${product.slug}`,
-        },
-      },
-  }));
-  
-  const enUrls = products.map((product: { slug: string }) => ({
-    url: `${process.env.NEXT_PUBLIC_ROOT_URL}/en/products/${product.slug}`,
-    lastModified: new Date().toISOString(),
-    alternates: {
-        languages: {
-          id: `${process.env.NEXT_PUBLIC_ROOT_URL}/produk/${product.slug}`,
-          en: `${process.env.NEXT_PUBLIC_ROOT_URL}/en/products/${product.slug}`,
-        },
-      },
-  }));
-   
-  return [idUrls, enUrls];
+type sitemapType = {
+  url: string,
+  lastModified: string,
+  alternates: {
+    languages: {
+      id: string,
+      en: string,
+    },
+  },
 }
 
 // Fetch your dynamic URLs (from a database, API, or local data)
-async function getSparepartsDynamicUrls() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_ROOT_URL}/${process.env.NEXT_PUBLIC_FETCH_ALL_SPAREPARTS}`);
-  const products = await res.json();
-  const idUrls = products.map((product: { slug: string }) => ({
-    url: `${process.env.NEXT_PUBLIC_ROOT_URL}/produk/${product.slug}`,
-    lastModified: new Date().toISOString(),
-    alternates: {
-        languages: {
-          id: `${process.env.NEXT_PUBLIC_ROOT_URL}/produk/${product.slug}`,
-          en: `${process.env.NEXT_PUBLIC_ROOT_URL}/en/products/${product.slug}`,
+async function getProductsDynamicUrls() {
+  const API=`${process.env.NEXT_PUBLIC_ROOT_URL}/${process.env.NEXT_PUBLIC_FETCH_ALL_PRODUCTS_JSON}`;
+  let drivers = ['drivers', 'spareparts']
+  let idUrls : sitemapType[] = []
+  let enUrls : sitemapType[] = []
+  drivers.map( async (val) => {
+    const API_EDITED = API.replace('{productCategory}', val)
+    const res = await fetch(API_EDITED);
+    const products: AllProductsJsonType[] = await res.json();
+    products.map((product : AllProductsJsonType) => {
+      let tempId: sitemapType = {
+        url: `${process.env.NEXT_PUBLIC_ROOT_URL}/produk/${product.slug}`,
+        lastModified: new Date().toISOString(),
+        alternates: {
+          languages: {
+            id: `${process.env.NEXT_PUBLIC_ROOT_URL}/produk/${product.slug}`,
+            en: `${process.env.NEXT_PUBLIC_ROOT_URL}/en/products/${product.slug}`,
+          },
         },
-      },
-  }));
-  
-  const enUrls = products.map((product: { slug: string }) => ({
-    url: `${process.env.NEXT_PUBLIC_ROOT_URL}/en/products/${product.slug}`,
-    lastModified: new Date().toISOString(),
-    alternates: {
-        languages: {
-          id: `${process.env.NEXT_PUBLIC_ROOT_URL}/produk/${product.slug}`,
-          en: `${process.env.NEXT_PUBLIC_ROOT_URL}/en/products/${product.slug}`,
+      }
+      let tempEn: sitemapType = {
+        url: `${process.env.NEXT_PUBLIC_ROOT_URL}/en/products/${product.slug}`,
+        lastModified: new Date().toISOString(),
+        alternates: {
+          languages: {
+            id: `${process.env.NEXT_PUBLIC_ROOT_URL}/produk/${product.slug}`,
+            en: `${process.env.NEXT_PUBLIC_ROOT_URL}/en/products/${product.slug}`,
+          },
         },
-      },
-  }));
-   
+      }
+      idUrls.push(tempId)
+      enUrls.push(tempEn)
+    });
+  })
   return [idUrls, enUrls];
 }
 
@@ -68,7 +60,7 @@ async function getNewsDynamicUrls() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_ROOT_URL}/${API_EDITED}`);
   const news = await res.json();
 
-  const idUrls = news.map((onenews: { slug: string }) => ({
+  const idUrls : sitemapType[] = news.map((onenews: { slug: string }) => ({
     url: `${process.env.NEXT_PUBLIC_ROOT_URL}/berita/${onenews.slug}`,
     lastModified: new Date().toISOString(),
     alternates: {
@@ -79,7 +71,7 @@ async function getNewsDynamicUrls() {
     },
   }));
 
-  const enUrls = news.map((onenews: { slug_english: string }) => ({
+  const enUrls : sitemapType[] = news.map((onenews: { slug_english: string }) => ({
     url: `${process.env.NEXT_PUBLIC_ROOT_URL}/en/news/${onenews.slug_english}`,
     lastModified: new Date().toISOString(),
     alternates: {
@@ -96,12 +88,12 @@ async function getNewsDynamicUrls() {
 // Generate the sitemap dynamically
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [productsDynamicUrlsID, productsDynamicUrlsEN] = await getProductsDynamicUrls();
-  const [sparepartsDynamicUrlsID, sparepartsDynamicUrlsEN] = await getSparepartsDynamicUrls();
+  // const [sparepartsDynamicUrlsID, sparepartsDynamicUrlsEN] = await getSparepartsDynamicUrls();
   const [newsDynamicUrlsID, newsDynamicUrlsEN]= await getNewsDynamicUrls();
 
 
   // Static URLs
-  const staticUrlsID = [
+  const staticUrlsID : sitemapType[] = [
     {
       url: `${process.env.NEXT_PUBLIC_ROOT_URL}`,
       lastModified: new Date().toISOString(),
@@ -951,7 +943,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   ];
 
-   const staticUrlsEN = [
+   const staticUrlsEN : sitemapType [] = [
     {
       url: `${process.env.NEXT_PUBLIC_ROOT_URL}/en`,
       lastModified: new Date().toISOString(),
@@ -1801,9 +1793,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
   //@ts-ignore
-  [...staticUrlsID, ...productsDynamicUrlsID, ...sparepartsDynamicUrlsID, ...newsDynamicUrlsID],
+  [...staticUrlsID, ...productsDynamicUrlsID, ...newsDynamicUrlsID],
   //@ts-ignore
-  [...staticUrlsEN, ...productsDynamicUrlsEN, ...sparepartsDynamicUrlsEN , ...newsDynamicUrlsEN],
+  [...staticUrlsEN, ...productsDynamicUrlsEN, ...newsDynamicUrlsEN],
 ];
 }
 

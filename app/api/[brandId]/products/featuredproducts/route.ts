@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 import prismadb from '@/lib/prismadb';
-import { allCardFeaturedProduct } from '@/app/utils/filterPageProps';
+import { allCardProduct } from '@/app/utils/filterPageProps';
 
 export async function GET(req: Request, props: { params: Promise<{ brandId: string }> }) {
   const params = await props.params;
@@ -11,7 +11,7 @@ export async function GET(req: Request, props: { params: Promise<{ brandId: stri
       return new NextResponse("brand id is required", { status: 400 });
     }
 
-    let neededSpec = allCardFeaturedProduct
+    let neededSpec = allCardProduct
 
     const allSpecsNeeded = await prismadb.dynamicspecification.findMany({
       where: {

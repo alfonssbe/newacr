@@ -1,5 +1,6 @@
 import { AllFilterProductsOnlyType, ChildSpecificationProp } from "../types";
 import { redirect } from "next/navigation";
+import { allCardProduct } from "../utils/filterPageProps";
 
 const API=`${process.env.NEXT_PUBLIC_ROOT_URL}/${process.env.NEXT_PUBLIC_FETCH_ALL_FEATURED_PRODUCTS}`;
 
@@ -52,11 +53,9 @@ const getAllFeaturedProducts = async (): Promise<AllFilterProductsOnlyType[]> =>
             url: val.cover_img[0].url
           },
           allCat: val.allCat,
-          spec: {
-            sensitivity : alltempSpec.find((val) => val.slugEnglish === 'sensitivity') ?? null,
-            impedance : alltempSpec.find((val) => val.slugEnglish === 'impedance') ?? null,
-            programpower : alltempSpec.find((val) => val.slugEnglish === 'program-power') ?? null
-          }
+          spec: allCardProduct
+            .map((slug) => alltempSpec.find((val) => val.slugEnglish === slug) ?? null)
+            .filter((item): item is ChildSpecificationProp => item !== null)
         },
         size: {
           name: val.size.value,

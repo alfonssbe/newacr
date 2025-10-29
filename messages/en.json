@@ -18,12 +18,6 @@
     "view-all-product": "VIEW ALL PRODUCTS"
   },
   "Navbar Content": {
-    "navbar-content-sensitivity": "Sensitivity",
-    "navbar-content-diameter-voice-coil": "Voice Coil Diameter",
-    "navbar-content-program-power": "Program Power",
-    "navbar-content-nominal-power-handling": "Nominal Power Handling",
-    "navbar-content-impedansi": "Impedance",
-    "navbar-content-respon-frekuensi": "Frequency Response",
     "navbar-content-placeholder": "Hover a Product to see a Preview!","navbar-content-have-sparepart": "SPAREPART AVAILABLE"
   },
   "Homepage": {
@@ -38,10 +32,7 @@
   "New Product Home": {
     "h2 title": "ACR Speaker New Products",
     "tombol-spesifikasi": "SPECIFICATION",
-    "tombol-perbandingan": "COMPARE",
-    "sensitivity-spec": "Sensitivity",
-    "impedansi-spec": "Impedance",
-    "program-power-spec": "Program Power"
+    "tombol-perbandingan": "COMPARE"
   },
   "Series Home": {
     "h2 title": "All ACR Speaker Series",
@@ -111,12 +102,6 @@
     "all-filters-compare-full-title": "Full Comparison Table!",
     "all-filters-compare-full-description": "Total not more than 5",
     "product-not-found": "No Product Found.",
-    "all-filters-slider-diameter-cone": "Cone Diameter",
-    "all-filters-slider-sensitivity": "Sensitivity",
-    "all-filters-slider-diameter-voice-coil": "Voice Coil Diameter",
-    "all-filters-checkbox-type": "Type",
-    "all-filters-checkbox-series": "Series",
-    "all-filters-checkbox-acr-series": "ACR Series",
     "search-not-found": "No products found.",
     "search": "Search Product"
   },
@@ -134,46 +119,8 @@
     "single-product-specification-title": "Specifications",
     "single-product-specification-coming-soon": "Coming Soon!",
     "single-product-features": "Features",
-    "single-product-thiele-title": "Thiele-Small Parameters",
-    "single-product-horn": "Horn Specification",
-    "single-product-ceiling": "Ceiling Specification",
     "single-product-button-download-manual": "Download Manual",
-    "single-product-diameter-speaker": "Speaker Diameter",
-    "single-product-daya-maksimum": "Maximum Power",
-    "single-product-lebar-frekuensi": "Frequency Response",
-    "single-product-sensitivity": "Sensitivity",
-    "single-product-medan-magnet": "Magnetic flux density",
-    "single-product-berat-magnet": "Magnet Weight",
-    "single-product-diameter-voice-coil": "Voice Coil Diameter",
-    "single-product-impedansi": "Impedance",
-    "single-product-nominal-power-handling": "Nominal Power Handling",
-    "single-product-program-power": "Program Power",
-    "single-product-material-voice-coil": "Voice Coil Material",
-    "single-product-berat-speaker": "Speaker Weight",
-    "single-product-deskripsi": "Description ",
-    "single-product-isi-per-dus": "Quantity / Box","single-product-button-comparison": "Compare","single-product-button-sparepart": "Sparepart Available"
-  },
-  "Ceiling Table": {
-    "ceiling-table-model": "Model",
-    "ceiling-table-type": "Type",
-    "ceiling-table-input": "Input",
-    "ceiling-table-rated-impedance": "Rated Impedance",
-    "ceiling-table-sensitivity": "Sensitivity",
-    "ceiling-table-frequency-response": "Frequency Response",
-    "ceiling-table-line-voltage": "Line Voltage",
-    "ceiling-table-speaker-component": "Speaker Component",
-    "ceiling-table-weight": "Weight",
-    "ceiling-table-material": "Material",
-    "ceiling-table-accessory": "Accessory",
-    "ceiling-table-rated-power": "Rated Power"
-  },
-  "Horn Table": {
-    "horn-table-diameter-throat": "Throat Diameter",
-    "horn-table-ukuran": "Size",
-    "horn-table-material": "Material"
-  },
-  "Thiele Table": {
-    "thiele-table-liters": "litres"
+    "single-product-button-comparison": "Compare","single-product-button-sparepart": "Sparepart Available"
   },
   "News Page": {
     "news-breadcrumb": "All News",

@@ -65,7 +65,7 @@ export interface NavbarFeaturedProduct {
     url: string;
     haveSparepart: boolean;
     categoryDetails: string;
-    spec: Specifications;
+    spec: ChildSpecificationProp[];
     series: string;
     subcat: string;
 }
@@ -337,7 +337,7 @@ export interface AllProductsJsonType {
     slug: string
     type: string
   }[]
-  spec: specForProductCardProps
+  spec: ChildSpecificationProp[]
 };
 
 export interface AllFilterProductsOnlyType {
@@ -347,10 +347,4 @@ export interface AllFilterProductsOnlyType {
     value: string
   },
   specs: ChildSpecificationProp[]
-}
-
-export interface specForProductCardProps {
-    sensitivity: ChildSpecificationProp | null
-    impedance: ChildSpecificationProp | null
-    programpower: ChildSpecificationProp | null
 }

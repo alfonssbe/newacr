@@ -18,12 +18,6 @@
     "view-all-product": "LIHAT SEMUA PRODUK"
   },
   "Navbar Content": {
-    "navbar-content-sensitivity": "Sensitivity",
-    "navbar-content-diameter-voice-coil": "Diameter Voice Coil",
-    "navbar-content-program-power": "Daya Program",
-    "navbar-content-nominal-power-handling": "Nominal Power Handling",
-    "navbar-content-impedansi": "Impedansi",
-    "navbar-content-respon-frekuensi": "Lebar Frekuensi",
     "navbar-content-placeholder": "Pilih 1 produk untuk melihat preview!",
     "navbar-content-have-sparepart": "SPAREPART TERSEDIA"
   },
@@ -39,10 +33,7 @@
   "New Product Home": {
     "h2 title": "Produk Terbaru ACR Speaker!",
     "tombol-spesifikasi": "SPESIFIKASI",
-    "tombol-perbandingan": "PERBANDINGAN",
-    "sensitivity-spec": "Sensitivity",
-    "impedansi-spec": "Impedansi",
-    "program-power-spec": "Daya Program"
+    "tombol-perbandingan": "PERBANDINGAN"
   },
   "Series Home": {
     "h2 title": "Semua Seri ACR Speaker",
@@ -111,12 +102,6 @@
     "all-filters-compare-full-title": "Tabel Perbandingan Full!",
     "all-filters-compare-full-description": "Total tidak lebih dari 5",
     "product-not-found": "Produk tidak ditemukan.",
-    "all-filters-slider-diameter-cone": "Diameter Cone",
-    "all-filters-slider-sensitivity": "Sensitivity",
-    "all-filters-slider-diameter-voice-coil": "Diameter Voice Coil",
-    "all-filters-checkbox-type": "Tipe",
-    "all-filters-checkbox-series": "Seri",
-    "all-filters-checkbox-acr-series": "Seri ACR",
     "search-not-found": "Produk tidak ditemukan.",
     "search": "Cari Produk"
   },
@@ -134,46 +119,8 @@
     "single-product-specification-title": "Spesifikasi",
     "single-product-specification-coming-soon": "Segera Hadir!",
     "single-product-features": "Fitur",
-    "single-product-thiele-title": "Parameter Thiele-Small",
-    "single-product-horn": "Spesifikasi Horn",
-    "single-product-ceiling": "Spesifikasi Ceiling",
     "single-product-button-download-manual": "Unduh Manual",
-    "single-product-diameter-speaker": "Diameter Speaker",
-    "single-product-daya-maksimum": "Daya Maksimum",
-    "single-product-lebar-frekuensi": "Lebar Frekuensi",
-    "single-product-sensitivity": "Sensitivity",
-    "single-product-medan-magnet": "Medan Magnet",
-    "single-product-berat-magnet": "Berat Magnet",
-    "single-product-diameter-voice-coil": "Diameter Voice Coil",
-    "single-product-impedansi": "Impedansi",
-    "single-product-nominal-power-handling": "Nominal Power Handling",
-    "single-product-program-power": "Daya Program",
-    "single-product-material-voice-coil": "Material Voice Coil",
-    "single-product-berat-speaker": "Berat Speaker",
-    "single-product-deskripsi": "Deskripsi",
-    "single-product-isi-per-dus": "Isi / Dus","single-product-button-comparison": "Bandingkan","single-product-button-sparepart": "Sparepart Tersedia"
-  },
-  "Ceiling Table": {
-    "ceiling-table-model": "Model",
-    "ceiling-table-type": "Tipe",
-    "ceiling-table-input": "Input",
-    "ceiling-table-rated-impedance": "Impedansi",
-    "ceiling-table-sensitivity": "Sensitivity",
-    "ceiling-table-frequency-response": "Respon Frekuensi",
-    "ceiling-table-line-voltage": "Tegangan Listrik",
-    "ceiling-table-speaker-component": "Komponen Speaker",
-    "ceiling-table-weight": "Berat",
-    "ceiling-table-material": "Material",
-    "ceiling-table-accessory": "Aksesoris",
-    "ceiling-table-rated-power": "Daya"
-  },
-  "Horn Table": {
-    "horn-table-diameter-throat": "Diameter Throat",
-    "horn-table-ukuran": "Ukuran",
-    "horn-table-material": "Material"
-  },
-  "Thiele Table": {
-    "thiele-table-liters": "liter"
+    "single-product-button-comparison": "Bandingkan","single-product-button-sparepart": "Sparepart Tersedia"
   },
   "News Page": {
     "news-breadcrumb": "Semua Berita",

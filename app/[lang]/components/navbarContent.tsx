@@ -3,7 +3,7 @@
 import { NavigationMenuContent, NavigationMenuLink } from "./ui/navigation-menu";
 import { ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
-import { NavbarComponents, NavbarFeaturedProduct, NavbarProducts } from "@/app/types";
+import { ChildSpecificationProp, NavbarComponents, NavbarFeaturedProduct, NavbarProducts } from "@/app/types";
 import getAllNavbarContent from "@/app/actions/get-all-navbar-content";
 import getProductsForNavbar from "@/app/actions/get-product-for-navbar";
 import { Loader } from './ui/loader';
@@ -1941,24 +1941,24 @@ function NavbarContent (){
                 </div>
               </div>
               <div className="w-1/5 bg-secondary/10 h-[calc(100vh-80px)] overflow-y-scroll scrollbar-none scrollbar-thumb-background scrollbar-track-secondary p-4 flex justify-center text-center">
-                  {FeaturedProduct === null ?
+                  {FeaturedProduct && (
+                    FeaturedProduct === null ?
                     <div className="h-full flex justify-center items-center text-background">
                       {t('navbar-content-placeholder')}
                     </div>
                   :
-                  loadingFeatured?
-                    <div className="w-full h-full flex items-center justify-center">
-                      <div className="flex flex-col items-center justify-center">
-                          <Loader/>
+                    loadingFeatured?
+                      <div className="w-full h-full flex items-center justify-center">
+                        <div className="flex flex-col items-center justify-center">
+                            <Loader/>
+                        </div>
                       </div>
-                    </div>
                   :
-                  <>
                     <div className="pb-4">
                       <div className="flex items-center justify-center py-2">
                         <LazyImageCustom
                           src={`/images/acr/series_logo/${
-                            FeaturedProduct?.series && FeaturedProduct?.series != "" ? 
+                            FeaturedProduct.series && FeaturedProduct.series != "" ? 
                             FeaturedProduct.series === "Black" ?
                                 "acr_black_bg.webp"
                               :  
@@ -2019,47 +2019,32 @@ function NavbarContent (){
                       <div className="text-base mb-4 line-clamp-2 text-background">
                         {FeaturedProduct.categoryDetails}
                       </div>
-                      <div className="bg-secondary-foreground rounded-lg p-2 text-sm text-background">             
-                        <div>
-                          {t('navbar-content-sensitivity')}
+                      {FeaturedProduct.spec && FeaturedProduct.spec.length > 0 &&
+                        <div className="bg-secondary-foreground rounded-lg p-2 text-sm text-background">
+                          {FeaturedProduct.spec.map((val: ChildSpecificationProp) => 
+                            locale === 'en' ?
+                            <>
+                              <div>
+                                {val.childnameEnglish}
+                              </div>
+                              <div className="font-bold pb-2">
+                                {val.value} {val.unit}
+                              </div>
+                            </>
+                            :
+                            <>
+                              <div>
+                                {val.childnameIndo}
+                              </div>
+                              <div className="font-bold pb-2">
+                                {val.value} {val.unit}
+                              </div>
+                            </>
+                          )}
                         </div>
-                        <div className="font-bold pb-2">
-                          {FeaturedProduct?.spec && FeaturedProduct?.spec.spl ? FeaturedProduct.spec.spl.concat(" dB") : '-'}
-                        </div>
-                        <div>
-                        {t('navbar-content-diameter-voice-coil')}
-                        </div>
-                        <div className="font-bold pb-2">
-                          {FeaturedProduct?.spec && FeaturedProduct?.spec.voice_coil_diameter ? FeaturedProduct.spec.voice_coil_diameter.concat(" mm") : '-'}
-                        </div>
-                        <div>
-                        {t('navbar-content-program-power')}
-                        </div>
-                        <div className="font-bold pb-2">
-                          {FeaturedProduct?.spec && FeaturedProduct?.spec.program_power ? FeaturedProduct.spec.program_power.concat(" Watt") : '-'}
-                        </div>
-                        <div>
-                        {t('navbar-content-nominal-power-handling')}
-                        </div>
-                        <div className="font-bold pb-2">
-                          {FeaturedProduct?.spec && FeaturedProduct?.spec.nominal_power_handling ? FeaturedProduct.spec.nominal_power_handling.concat(" Watt") : '-'}
-                        </div>
-                        <div>
-                        {t('navbar-content-impedansi')}
-                        </div>
-                        <div className="font-bold pb-2">
-                          {FeaturedProduct?.spec && FeaturedProduct?.spec.impedansi ? FeaturedProduct.spec.impedansi.concat(" Ω") : '-'}
-                        </div>
-                        <div>
-                        {t('navbar-content-respon-frekuensi')}
-                        </div>
-                        <div className="font-bold pb-2">
-                          {FeaturedProduct?.spec && FeaturedProduct?.spec.lebar_daerah_frekuensi ? FeaturedProduct.spec.lebar_daerah_frekuensi : '-'}
-                        </div>
-                      </div>
+                      }
                     </div>
-                  </>
-                }
+                )}
               </div>
             </div>
           </div>

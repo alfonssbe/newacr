@@ -3,6 +3,7 @@ import { AllProductsJsonType } from "@/app/types";
 import { Button } from "@/components/ui/button";
 import { useLocale, useTranslations } from "next-intl";
 import { LazyImageCustom } from "../lazyImageCustom";
+import { allCardProduct } from "@/app/utils/filterPageProps";
 
 interface ReviewCard {
   data: AllProductsJsonType
@@ -80,9 +81,8 @@ const ProductCard: React.FC<ReviewCard> = ({
             return '';
           })()}
         </h4>
-      {isSparepart ? 
-        <div className="grid grid-cols-1 w-full py-4 gap-2">
-          <div className="flex items-center h-auto">
+        <div className={`${data.spec.length > 0 ? 'grid grid-cols-2' : 'grid grid-cols-1'} w-full py-4 gap-2`}>
+          <div className="min-h-[185px] flex items-center h-auto">
             <LazyImageCustom
               src={data.cover_img.url.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${data.cover_img.url}` : data.cover_img.url} 
               alt={data.name} 
@@ -92,79 +92,25 @@ const ProductCard: React.FC<ReviewCard> = ({
               lazy={false}
             />
           </div>   
-          {/* <div className="w-full min-h-[160px] bg-transparent rounded-md p-2">
-            <div className="text-sm text-black lg:text-base font-light pt-2"><h4 className=" line-clamp-1">{t('sensitivity-spec')}</h4>
-              {data.spec.sensitivity ? 
-              data.spec.sensitivity.value != "-" && data.spec.sensitivity.value != "" && 
-                <h5 className="font-semibold">
-                  {data.spec.sensitivity.value} {data.spec.sensitivity.unit}
-                </h5>
-              :
-                <>-</>
-              } 
+          {data.spec.length > 0 &&
+            <div className="w-full min-h-[185px] bg-transparent rounded-md p-2">
+              {data.spec.map((oneSpec, index) => 
+                <div className="text-sm text-black lg:text-base font-light pt-2" key={index}>
+                  <h4 className=" line-clamp-1">
+                    {locale === 'en' ? oneSpec.childnameEnglish : oneSpec.childnameIndo}
+                  </h4>
+                  {oneSpec.value != "-" && oneSpec.value != "" ? 
+                    <h5 className="font-semibold line-clamp-1">
+                      {oneSpec.value} {oneSpec.unit}
+                    </h5>
+                  :
+                    <>-</>
+                  } 
+                </div>
+              )}
             </div>
-            <div className="text-sm text-black lg:text-base font-light pt-2"><h4 className=" line-clamp-1">{t('impedansi-spec')}</h4>
-            
-              {data.spec.impedance ? 
-                data.spec.impedance.value != "-" && data.spec.impedance.value != "" && <h5 className="font-semibold">{data.spec.impedance.value} {data.spec.impedance.unit}</h5>
-              :
-              <>-</>}
-            </div>
-            <div className="text-sm text-black lg:text-base font-light pt-2"><h4 className=" line-clamp-1">{t('program-power-spec')}</h4>
-            {data.spec.programpower ? 
-              data.spec.programpower.value != "-" && data.spec.programpower.value != "" && <h5 className="font-semibold">{data.spec.programpower.value} {data.spec.programpower.unit}</h5>
-            :
-            <>-</>}        
-            </div>
-          </div> */}
+          }
         </div>
-        :
-        <div className="grid grid-cols-2 w-full py-4 gap-2">
-          <div className="flex items-center h-auto">
-            <LazyImageCustom
-              src={data.cover_img.url.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${data.cover_img.url}` : data.cover_img.url} 
-              alt={data.name} 
-              width={500}
-              height={500}
-              classname="max-h-[160px] w-auto"
-              lazy={false}
-            />
-          </div>   
-          <div className="w-full min-h-[160px] bg-transparent rounded-md p-2">
-            <div className="text-sm text-black lg:text-base font-light pt-2">
-              <h4 className=" line-clamp-1">
-                {t('sensitivity-spec')}
-              </h4>
-              {data.spec.sensitivity ? 
-              data.spec.sensitivity.value != "-" && data.spec.sensitivity.value != "" && 
-                <h5 className="font-semibold line-clamp-1">
-                  {data.spec.sensitivity.value} {data.spec.sensitivity.unit}
-                </h5>
-              :
-                <>-</>
-              } 
-            </div>
-            <div className="text-sm text-black lg:text-base font-light pt-2">
-              <h4 className=" line-clamp-1">{t('impedansi-spec')}</h4>
-              
-              {data.spec.impedance ? 
-                data.spec.impedance.value != "-" && data.spec.impedance.value != "" && <h5 className="font-semibold line-clamp-1">{data.spec.impedance.value} {data.spec.impedance.unit}</h5>
-              :
-              <>-</>} 
-              
-            </div>
-            <div className="text-sm text-black lg:text-base font-light pt-2">
-              <h4 className=" line-clamp-1">{t('program-power-spec')}</h4>
-              
-              {data.spec.programpower ? 
-                data.spec.programpower.value != "-" && data.spec.programpower.value != "" && <h5 className="font-semibold">{data.spec.programpower.value} {data.spec.programpower.unit}</h5>
-              :
-              <>-</>} 
-              
-            </div>
-          </div>
-        </div>
-      }
       
     </div>  
 
