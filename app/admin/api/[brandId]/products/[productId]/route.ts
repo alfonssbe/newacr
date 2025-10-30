@@ -30,7 +30,6 @@ export async function GET(req: Request, props: { params: Promise<{ productId: st
       },
       include: {
         allCat: true,
-        specification: true,
         images_catalogues: true,
         cover_img: true,
         drawing_img: true,
@@ -264,30 +263,6 @@ export async function DELETE(
         productId: params.productId,
       },
     });
-    //Delete ceilingspecification
-    await prismadb.ceilingSpecification.deleteMany({
-      where: {
-        productId: params.productId,
-      },
-    });
-    //Delete hornspecification
-    await prismadb.hornSpecification.deleteMany({
-      where: {
-        productId: params.productId,
-      },
-    });
-    //Delete specification
-    await prismadb.specification.deleteMany({
-      where: {
-        productId: params.productId,
-      },
-    });
-    //Delete thielesmallparameters2ohm
-    await prismadb.thieleSmallParameters2Ohm.deleteMany({
-      where: {
-        productId: params.productId,
-      },
-    });
 
     const deletedProd = await prismadb.product.findFirst({
       where: {
@@ -333,7 +308,7 @@ export async function PATCH(
 
     const body = await req.json();
 
-    const { name, description, description_english, isFeatured, isArchived, isNewProduct, isHorn, isCeiling, haveSparepart, sizeId, images_catalogues, multipleDatasheetProduct, cover_img, drawing_img, graph_img, impedance_img, series } = body;
+    const { name, description, description_english, isFeatured, isArchived, isNewProduct, haveSparepart, sizeId, images_catalogues, multipleDatasheetProduct, cover_img, drawing_img, graph_img, impedance_img, series } = body;
 
     if (!params.productId) {
       return new NextResponse("Product id is required", { status: 400 });
@@ -778,8 +753,6 @@ export async function PATCH(
             isFeatured,
             isArchived,
             isNewProduct,
-            isHorn,
-            isCeiling,
             haveSparepart,
             series,
             sizeId,
@@ -1221,8 +1194,6 @@ export async function PATCH(
         isFeatured,
         isArchived,
         isNewProduct,
-        isHorn,
-        isCeiling,
         haveSparepart,
         series,
         sizeId,

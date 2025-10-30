@@ -113,7 +113,8 @@
     "comparison-page-datasheet": "Download Manual",
     "comparison-page-no-product-searchbox": "No Product Found",
     "comparison-page-searchbox-placeholder": "Compare",
-    "comparison-page-breadcrumb": "Comparison"
+    "comparison-page-breadcrumb": "Comparison",
+    "comparison-page-other-data": "Other Data"
   },
   "Single Product Page": {
     "single-product-specification-title": "Specifications",

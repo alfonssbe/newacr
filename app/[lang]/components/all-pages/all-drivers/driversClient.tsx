@@ -34,7 +34,7 @@ export default function ProductByCategoryPage(props: Props) {
         let counterShow = 0;
         for (const key in allSpecsCombined) {
           if(key !== 'impedance' && key !== 'program-power'){
-            if(key !== 'series' && key != "type" && key != "series-acr") {
+            if(key !== 'series' && key != "type" && key != "acr-series") {
               const allValueWithoutDuplicates: number[] = removeDuplicates(allSpecsCombined[key].map((val) => Number(val.value)));
               const allValueWithoutDuplicatesAndNone = allValueWithoutDuplicates.filter(number => !Number.isNaN(number));
               const sortedValues = allValueWithoutDuplicatesAndNone.slice().sort((a, b) => a - b);

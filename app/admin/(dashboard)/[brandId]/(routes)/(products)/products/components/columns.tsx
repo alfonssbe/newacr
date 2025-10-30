@@ -13,8 +13,6 @@ export type ProductColumn = {
   isFeatured: boolean;
   isArchived: boolean;
   productImageUrl: string[];
-  isCeiling: boolean;
-  isHorn: boolean;
 }
 
 export const columns: ColumnDef<ProductColumn>[] = [

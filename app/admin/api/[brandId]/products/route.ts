@@ -32,7 +32,7 @@ export async function POST(req: Request, props: { params: Promise<{ brandId: str
 
     const body = await req.json();
 
-    const { name, sizeId,  description, description_english, isFeatured, isArchived, isNewProduct, isHorn, isCeiling, haveSparepart, images_catalogues, cover_img, drawing_img, graph_img, impedance_img, multipleDatasheetProduct, series } = body;
+    const { name, sizeId,  description, description_english, isFeatured, isArchived, isNewProduct, haveSparepart, images_catalogues, cover_img, drawing_img, graph_img, impedance_img, multipleDatasheetProduct, series } = body;
 
     if (!name) {
       return new NextResponse("Name is required", { status: 400 });
@@ -65,12 +65,9 @@ export async function POST(req: Request, props: { params: Promise<{ brandId: str
         isFeatured,
         isArchived,
         isNewProduct,
-        isHorn,
-        isCeiling,
         haveSparepart,
         sizeId,
         series,
-        specId: "0",
         updatedBy: session.name,
         brandId: params.brandId,
         createdAt: new Date(),
@@ -170,41 +167,6 @@ export async function POST(req: Request, props: { params: Promise<{ brandId: str
       })
     }
 
-    const spec = await prismadb.specification.create({
-      data: {
-        diameter_speaker:'',
-        daya_maksimum:'',
-        lebar_daerah_frekuensi  :'',
-        spl  :'',
-        medan_magnet :'',
-        berat_magnet :'',
-        voice_coil_diameter  :'',
-        impedansi :'',
-        nominal_power_handling :'',
-        program_power :'',
-        voice_coil_material :'',
-        berat_speaker :'',
-        custom_note:'',
-        deskripsi_sparepart: '',
-        isi_per_dus_sparepart: '',
-        productId: product.id,
-        updatedAt: new Date(),
-        createdAt: new Date()
-      }
-    });
-
-    
-    await prismadb.product.update({
-      where:{
-        id: product.id
-      },
-      data: {
-        specId: spec.id,
-        updatedBy: session.name,
-        updatedAt: new Date()
-      }
-    });
-
     revalidatePath(`/produk/${product.slug}`)
     revalidatePath(`/en/products/${product.slug}`)
   
@@ -234,7 +196,6 @@ export async function GET(req: Request, props: { params: Promise<{ brandId: stri
         graph_img: true,
         impedance_img: true,
         allCat: true,
-        specification: true,
         size: true,
       },
       orderBy: {

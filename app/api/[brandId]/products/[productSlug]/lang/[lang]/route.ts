@@ -116,10 +116,6 @@ export async function GET(req: Request, props: { params: Promise<{ lang: string,
 
     const responseData = {
       product,
-      // hornSpecification: hornSpecification || null,
-      // ceilingSpecification: ceilingSpecification || null,
-      // thielesmallparameter2: thielesmallparameter2 || null,
-      // tes: ""
       specifications: specsCombined
     };
 

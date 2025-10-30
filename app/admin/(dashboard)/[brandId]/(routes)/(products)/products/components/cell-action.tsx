@@ -112,30 +112,6 @@ export const CellAction: React.FC<CellActionProps> = ({
           >
             <Edit className="mr-2 h-4 w-4" /> Set Dynamic Specifications
           </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => router.push(`${process.env.NEXT_PUBLIC_ADMIN_FOLDER_URL}/${params.brandId}/products/${data.id}/specification`)}
-            >
-              <Settings2 className="mr-2 h-4 w-4" /> Set Specification
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => router.push(`${process.env.NEXT_PUBLIC_ADMIN_FOLDER_URL}/${params.brandId}/products/${data.id}/thiele_specification`)}
-            >
-              <Settings2 className="mr-2 h-4 w-4" /> Set Thiele Small Parameters
-            </DropdownMenuItem>
-            {data.isCeiling &&
-              <DropdownMenuItem
-                onClick={() => router.push(`${process.env.NEXT_PUBLIC_ADMIN_FOLDER_URL}/${params.brandId}/products/${data.id}/ceiling_specification`)}
-              >
-                <Settings2 className="mr-2 h-4 w-4" /> Set Ceiling Specification
-              </DropdownMenuItem>
-            }
-            {data.isHorn &&
-              <DropdownMenuItem
-                onClick={() => router.push(`${process.env.NEXT_PUBLIC_ADMIN_FOLDER_URL}/${params.brandId}/products/${data.id}/horn_specification`)}
-              >
-                <Settings2 className="mr-2 h-4 w-4" /> Set Horn Specification
-              </DropdownMenuItem>
-            }
           <DropdownMenuItem
             onClick={() => router.push(`${process.env.NEXT_PUBLIC_ADMIN_FOLDER_URL}/${params.brandId}/products/${data.id}/categories`)}
           >

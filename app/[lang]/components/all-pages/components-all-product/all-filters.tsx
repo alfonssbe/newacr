@@ -385,7 +385,7 @@ const AllDriversandFiltersProducts: React.FC<MainProps> = ({
                         else if(checkbox.slug === 'type'){
                             productValue = product.products.allCat.find((val) => val.type === 'Sub Sub Category' && val.name.toLowerCase() === checkbox.name.toLowerCase())?.name ?? undefined;
                         }
-                        else if(checkbox.slug === 'series-acr'){
+                        else if(checkbox.slug === 'acr-series'){
                             productValue = product.products.allCat.find((val) => val.type === 'Series' && val.name.toLowerCase() === checkbox.name.toLowerCase())?.name ?? undefined;
                         }
 

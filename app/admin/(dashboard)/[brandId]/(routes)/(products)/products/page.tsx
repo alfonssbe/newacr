@@ -45,8 +45,6 @@ const ProductsPage = async (
     updatedBy: item.updatedBy,
     isFeatured: item.isFeatured,
     isArchived: item.isArchived,
-    isHorn: item.isHorn,
-    isCeiling: item.isCeiling
   }));
 
   return (

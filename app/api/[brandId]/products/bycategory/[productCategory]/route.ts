@@ -140,17 +140,17 @@ export async function GET(
             })
           })
         }
-        else if(specParent === 'series-acr'){
+        else if(specParent === 'acr-series'){
           products.forEach((prod) => {
             prod.allCat.map((subprod) => {
               if(subprod.type === 'Series'){
                 const found = allSeries.find((val) => val.slug === subprod.slug)
                 found && matchingSpecs.push({
-                  childnameEnglish: "Series ACR",
+                  childnameEnglish: "ACR series",
                   childnameIndo: "Seri ACR",
                   value: subprod.name,
                   notes: '',
-                  slugEnglish: 'series-acr',
+                  slugEnglish: 'acr-series',
                   slugIndo: 'seri-acr',
                   unit: ''
                 })

@@ -1,28 +1,5 @@
 import { Prisma } from "@prisma/client";
 
-// export interface Products {
-//     id: string;
-//     name: string;
-//     slug: string;
-//     coverUrl: string;
-//     CoverAlt: string;
-//     size: Size;
-//     series: AllCategory[];
-//     categories: AllCategory[];
-//     sub_categories: AllCategory[];
-//     sub_sub_categories: AllCategory[];
-//     specification: Specifications;
-// }
-
-// export interface FeaturedProducts {
-//     id: string;
-//     name: string;
-//     slug: string;
-//     featuredImgUrl: string;
-//     featuredDesc: string;
-//     series: string;
-// }
-
 export interface Hero {
     id: string;
     name: string;
@@ -81,17 +58,6 @@ export interface NavbarCategory {
     type: string;
 }
 
-// export interface SubCategoryFilters {
-//     id: string;
-//     productId: string;
-//     categoryId: string;
-//     type: string;
-//     name: string;
-//     slug: string;
-//     createdAt: string;
-//     updatedAt: string;
-// }
-
 export interface NavbarProducts {
     name: string;
     href: string;
@@ -100,76 +66,6 @@ export interface NavbarProducts {
     slug: string;
     haveSparepart: boolean;
 }
-
-// export interface Specifications {
-//     diameter_speaker: string;
-//     daya_maksimum: string;
-//     lebar_daerah_frekuensi: string;
-//     spl: string;
-//     medan_magnet: string;
-//     berat_magnet: string;
-//     voice_coil_diameter: string;
-//     impedansi: string;
-//     nominal_power_handling: string;
-//     program_power: string;
-//     voice_coil_material: string;
-//     berat_speaker: string;
-//     custom_note: string;
-//     deskripsi_sparepart: string;
-//     isi_per_dus_sparepart: string;
-// }
-
-// export interface Horn_Specifications {
-//     diameter_throat: string
-//     ukuran: string
-//     material: string
-// }
-
-// export interface Ceiling_Specifications {
-//     model: string
-//     type: string
-//     input: string
-//     rated_impedance: string
-//     sensitivity: string
-//     frequency_response: string
-//     line_voltage: string
-//     speaker_component: string
-//     weight: string
-//     material: string
-//     accessory: string
-//     rated_power: string
-// }
-
-// export interface Thiele_Small_Parameters_Specifications {
-//     fs: string
-//     dcr: string
-//     qts: string
-//     qes: string
-//     qms: string
-//     mms: string
-//     cms: string
-//     bl_product: string
-//     vas: string
-//     no: string
-//     sd: string
-//     x_max: string
-// }
-
-// export interface Datasheet_Prod {
-//     productId: string
-//     name: string
-//     url: string
-//     id: string
-// }
-
-// export interface AllProductsForHome {
-//     allProducts: Products[];
-//     allSPL: number[];
-//     allVoiceCoilDiameter: number[];
-//     allSubSubCategory: string[];
-//     allSubCategory: string[];
-//     allSeries: string[];
-// }
 
 export interface SingleProducts {
     coverImg: FilesProp;
@@ -198,24 +94,6 @@ export interface MetadataSingleProducts {
     coverAlt: string;
     size: Size;
 }
-
-// export interface ComparisonProductData {
-//     id: string;
-//     name: string;
-//     desc: string;
-//     slug: string;
-//     coverUrl: string;
-//     coverAlt: string;
-//     graph_Url: string[];
-//     impedance_Url: string[];
-//     sub_sub_categories: AllCategory[];
-//     specification: Specifications;
-// }
-
-// export interface CachedAllProducts {
-//     allproduct: AllProductsForHome;
-//     allsizes: number[];
-// }
 
 export interface activeSlider{
     parentName: string;

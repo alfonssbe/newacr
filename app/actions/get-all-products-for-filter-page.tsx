@@ -76,14 +76,14 @@ const getAllProductsForFilterPage = async (api: string): Promise<[AllFilterProdu
           }
         })
       }
-      else if (key === 'series-acr'){
+      else if (key === 'acr-series'){
         val.allCat.map((cat: any) => {
           if(cat.type === 'Series') {
             let tempSpec: ChildSpecificationProp = {
-              childnameEnglish: "Series ACR",
+              childnameEnglish: "ACR Series",
               childnameIndo: "Seri ACR",
               value: cat.name,
-              slugEnglish: "series-acr",
+              slugEnglish: "acr-series",
               slugIndo: "seri-acr",
               notes: '',
               unit: ''

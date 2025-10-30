@@ -22,18 +22,17 @@ import 'yet-another-react-lightbox/styles.css'
 import 'yet-another-react-lightbox/plugins/thumbnails.css'
 import "yet-another-react-lightbox/plugins/captions.css";
 
-function createData(
-    name: string,
-    attribute: string,
-    unit: string,
-) {
-    return { name, attribute, unit };
+interface otherData {
+    name: string;
+    attribute: string;
+    unit: string;
 }
 
-function groupAllSpecifications(products: SingleProducts[], locale: string) {
+function groupAllSpecifications(products: (SingleProducts | null)[], locale: string) {
   const grouped: Record<string, Record<string, Record<string, string>>> = {};
 
   products.forEach((product) => {
+    product &&
     product.specification.forEach((spec) => {
       const parent = spec.parentname;
       const sub = spec.subparentname || "";
@@ -92,6 +91,20 @@ const ComparisonPage = () => {
     
     const [lightboxOpen2, setLightboxOpen2] = useState(false)
     const [lightboxIndex2, setLightboxIndex2] = useState(0)
+
+    
+
+    // const rows = [
+    //     createData(t('comparison-page-drawing_foto'), 'drawing', ""),
+    //     createData(t('comparison-page-respon-frekuensi-foto'), 'frequency', ""),
+    //     createData(t('comparison-page-impedansi-foto'), 'impedance', ""),
+    //     createData("Manual", 'manual', ""),
+    // ];
+
+    const [rows, setRows] = useState<otherData[]>([])
+
+    let lastParentTitle = '';
+    let lastSubParentTitle = '';
 
     const openLightbox0 = (index: number) => {
         setLightboxIndex0(index)
@@ -166,20 +179,82 @@ const ComparisonPage = () => {
             const product1slug = searchParams.get('product1slug');
             const product2slug = searchParams.get('product2slug');
             const product3slug = searchParams.get('product3slug');
-            let tempAllProduct : SingleProducts[] = []
+
+            let haveFrequency = false
+            let haveImpedance = false
+            let haveDrawing = false
+            let haveDatasheet = false
+
+            let tempAllProduct : (SingleProducts | null)[] = []
             if(product1slug){
                 let temp: SingleProducts = await getProduct(product1slug, locale);
                 tempAllProduct.push(temp)
+            }
+            else{
+                tempAllProduct.push(null)
             }
             if(product2slug){
                 let temp: SingleProducts = await getProduct(product2slug, locale);
                 tempAllProduct.push(temp)
             }
+            else{
+                tempAllProduct.push(null)
+            }
             if(product3slug){
                 let temp: SingleProducts = await getProduct(product3slug, locale);
                 tempAllProduct.push(temp)
             }
+            else{
+                tempAllProduct.push(null)
+            }
+            tempAllProduct.map((oneProd) => {
+                if(oneProd) {
+                    if (oneProd.graph && oneProd.graph.length > 0) {
+                        haveFrequency = true;
+                    }
+                    if (oneProd.impedance && oneProd.impedance.length > 0) {
+                        haveImpedance = true;
+                    }
+                    if (oneProd.drawing && oneProd.drawing.length > 0) {
+                        haveDrawing = true;
+                    }
+                    if (oneProd.datasheet && oneProd.datasheet.length > 0) {
+                        haveDatasheet = true;
+                    }
+                }
+            })
+
+            let tempRows: otherData[] = []
+            if(haveFrequency) {
+                tempRows.push({
+                    name: t('comparison-page-respon-frekuensi-foto'),
+                    attribute: 'frequency',
+                    unit: ""                    
+                });
+            }
+            if(haveImpedance) {
+                tempRows.push({
+                    name: t('comparison-page-impedansi-foto'),
+                    attribute: 'impedance',
+                    unit: ""                    
+                });
+            }
+            if(haveDrawing) {
+                tempRows.push({
+                    name: t('comparison-page-drawing_foto'),
+                    attribute: 'drawing',
+                    unit: ""                    
+                });
+            }
+            if(haveDatasheet) {
+                tempRows.push({
+                    name: 'Manual',
+                    attribute: 'manual',
+                    unit: ""                    
+                });
+            }
             const data : Searchbox[] = await getProductsForSearchbox();
+            setRows(tempRows)
             setSearchboxData(data)
             setFinalFetchedProduct(tempAllProduct)
             setAllSpecsUsed(groupAllSpecifications(tempAllProduct , locale))
@@ -189,14 +264,6 @@ const ComparisonPage = () => {
     }, [searchParams]);
 
 
-    
-
-    const rows = [
-        createData(t('comparison-page-drawing_foto'), 'drawing', ""),
-        createData(t('comparison-page-respon-frekuensi-foto'), 'frequency', ""),
-        createData(t('comparison-page-impedansi-foto'), 'impedance', ""),
-        createData("Manual", 'manual', ""),
-    ];
 
     const setQueryParam = (key: string, value: string) => {
         const params = new URLSearchParams(searchParams.toString());
@@ -204,7 +271,6 @@ const ComparisonPage = () => {
         params.set(key, value); // Adds if not present, updates if exists
         router.push(`?${params.toString()}`);
     };
-
 
     return (<>
         {loading?
@@ -235,18 +301,20 @@ const ComparisonPage = () => {
             <div className="flex justify-center items-center w-full">
                 <div
                     ref={scrollContainerRef}
-                    className="flex overflow-x-auto cursor-grab border"
+                    className={`flex overflow-x-auto cursor-grab ${finalFetchedProduct.length > 0 && 'border'} min-h-[400px]`}
                     onMouseDown={handleMouseDown}
                     onMouseMove={handleMouseMove}
                     onMouseUp={handleMouseUp}
                     onMouseLeave={handleMouseLeave}
                     style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
                 >
-                <div className="grid grid-cols-11 min-w-max pt-4">
+                <div className={`grid ${finalFetchedProduct.length > 0 ? 'grid-cols-[repeat(11,125px)]' : 'grid-cols-[repeat(9,125px)]'} min-w-max pt-4`}>
                     
                     {/* SEARCH */}
                     <>
-                        <div className='col-span-2 w-full'></div>
+                        {finalFetchedProduct.length > 0 && 
+                            <div className='col-span-2 w-full'></div>
+                        }
                         <div className="col-span-3 w-full flex items-center justify-center pb-4 px-2">
                             <div className="relative w-full">
                                 <Input 
@@ -462,7 +530,7 @@ const ComparisonPage = () => {
 
                     {/* PRODUCT IMAGE */}
                     <>
-                        <div className='col-span-2 w-full font-bold'></div>
+                        <div className='col-span-2 w-full font-semibold'></div>
                         
                        <div className="col-span-3 w-full flex items-center justify-center px-4">
                         {finalFetchedProduct[0] && finalFetchedProduct[0].coverImg.url !== "" && finalFetchedProduct[0].slug !== "" && (
@@ -527,8 +595,19 @@ const ComparisonPage = () => {
                                 indexParent * 1000 + // space between parent groups
                                 Object.keys(subRecord).indexOf(subKey) * 100; // avoid overlap between subcategories
 
+                            const showTitle =
+                                parentKey !== lastParentTitle || subKey !== lastSubParentTitle;
+
+                            if (showTitle) {
+                                lastParentTitle = parentKey;
+                                lastSubParentTitle = subKey;
+                            }
+
                             return (
                                 <Fragment key={`${parentKey}-${subKey}-${childKey}-${rowIndex}`}>
+                                {showTitle &&
+                                    <div className='col-span-11 py-4 font-bold text-xl border-foreground bg-secondary-foreground text-background border pl-2'>{parentKey}{subKey !== '' && subKey !== null && ` - ${subKey}`}</div>
+                                }
                                 <div
                                     className="contents"
                                     onMouseEnter={() => setActiveHover(rowIndex)}
@@ -540,7 +619,7 @@ const ComparisonPage = () => {
                                         activeHover === rowIndex
                                         ? "bg-primary text-background"
                                         : "bg-secondary"
-                                    } col-span-2 w-full border p-1 border-foreground flex text-center items-center justify-center transition-colors duration-200 ease-in-out`}
+                                    } col-span-2 w-full border p-1 border-foreground flex text-center items-center justify-center transition-colors duration-200 ease-in-out font-semibold`}
                                     >
                                     {parentKey !== "Additional Notes" && childKey}
                                     </div>
@@ -551,7 +630,7 @@ const ComparisonPage = () => {
                                         activeHover === rowIndex
                                         ? "bg-primary text-background"
                                         : "bg-transparent"
-                                    } col-span-3 w-full border border-foreground flex text-center items-center justify-center transition-colors duration-200 ease-in-out`}
+                                    } col-span-3 w-full border border-foreground flex text-center items-center justify-center transition-colors duration-200 ease-in-out px-4`}
                                     >
                                     {(() => {
                                         const foundChild = finalFetchedProduct[0]?.specification.find(
@@ -580,7 +659,7 @@ const ComparisonPage = () => {
                                         activeHover === rowIndex
                                         ? "bg-primary text-background"
                                         : "bg-transparent"
-                                    } col-span-3 w-full border border-foreground flex text-center items-center justify-center transition-colors duration-200 ease-in-out`}
+                                    } col-span-3 w-full border border-foreground flex text-center items-center justify-center transition-colors duration-200 ease-in-out px-4`}
                                     >
                                     {(() => {
                                         const foundChild = finalFetchedProduct[1]?.specification.find(
@@ -609,7 +688,7 @@ const ComparisonPage = () => {
                                         activeHover === rowIndex
                                         ? "bg-primary text-background"
                                         : "bg-transparent"
-                                    } col-span-3 w-full border border-foreground flex text-center items-center justify-center transition-colors duration-200 ease-in-out`}
+                                    } col-span-3 w-full border border-foreground flex text-center items-center justify-center transition-colors duration-200 ease-in-out px-4`}
                                     >
                                     {(() => {
                                         const foundChild = finalFetchedProduct[2]?.specification.find(
@@ -638,300 +717,307 @@ const ComparisonPage = () => {
                         )
                     )}
 
-
-                    {rows.map((row,indexHover) => 
-                        row.attribute === 'frequency' ?
-                            <div className="contents" onMouseEnter={() => setActiveHover(indexHover)} onMouseLeave={() => setActiveHover(undefined)} key={indexHover}>
-                                <div
-                                    className={`
-                                        ${activeHover === indexHover ? "bg-primary text-background" : "bg-secondary"}
-                                        col-span-2 w-full border border-foreground flex text-center items-center justify-center p-1
-                                        transition-colors duration-200 ease-in-out
-                                    `}
-                                >
-                                    {row.name}
-                                </div>
-                                
-                                <div    
-                                    className={`
-                                        ${activeHover === indexHover ? "bg-primary text-background" : "bg-transparent"}
-                                        col-span-3 w-full border border-foreground flex text-center items-center justify-center p-2
-                                        transition-colors duration-200 ease-in-out
-                                    `}
-                                >
-                                    {finalFetchedProduct[0] && finalFetchedProduct[0].graph.length > 0 ?
-                                    <div className='h-full w-full' onClick={() => openLightbox0(0)}>
-                                            <LazyImage
-                                                src={finalFetchedProduct[0].graph[0].url.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[0].graph[0].url}` : finalFetchedProduct[0].graph[0].url}
-                                                alt={`${finalFetchedProduct[0].name} - Frequency Response`}
-                                                width={300}
-                                                height={300} 
-                                            />
-                                        </div>
-                                        :
-                                        <>-</>
-                                    }
-                                </div>
-                                
-                                <div 
-                                    className={`
-                                        ${activeHover === indexHover ? "bg-primary text-background" : "bg-transparent"}
-                                        col-span-3 w-full border border-foreground flex text-center items-center justify-center p-2
-                                        transition-colors duration-200 ease-in-out
-                                    `}
-                                >
-                                    {finalFetchedProduct[1] && finalFetchedProduct[1].graph.length > 0 ?
-                                    <div className='h-full w-full' onClick={() => openLightbox1(0)}>
-                                        <LazyImage
-                                            src={finalFetchedProduct[1].graph[0].url.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[1].graph[0].url}` : finalFetchedProduct[1].graph[0].url}
-                                            alt={`${finalFetchedProduct[1].name} - Frequency Response`}
-                                            width={300}
-                                            height={300} 
-                                        />
-                                    </div>
-                                    :
-                                    <>-</>
-                                    }
-                                </div>
-                                
-                                <div 
-                                    className={`
-                                        ${activeHover === indexHover ? "bg-primary text-background" : "bg-transparent"}
-                                        col-span-3 w-full border border-foreground flex text-center items-center justify-center p-2
-                                        transition-colors duration-200 ease-in-out
-                                    `}
-                            >
-                                    {finalFetchedProduct[2] && finalFetchedProduct[2].graph.length > 0 ?
-                                    <div className='h-full w-full' onClick={() => openLightbox2(0)}>
-                                        <LazyImage
-                                            src={finalFetchedProduct[2].graph[0].url.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[2].graph[0].url}` : finalFetchedProduct[2].graph[0].url}
-                                            alt={`${finalFetchedProduct[2].name} - Frequency Response`}
-                                            width={300}
-                                            height={300} 
-                                        />
-                                    </div>
-                                    :
-                                    <>-</>
-                                    }
-                                </div>
+                    
+                    {finalFetchedProduct.length > 0 && rows.length > 0 && (
+                        <>
+                            <div className='col-span-11 py-4 font-bold text-xl border-foreground bg-secondary-foreground text-background border pl-2'>
+                                {t("comparison-page-other-data")}
                             </div>
-                        : row.attribute === 'impedance' ?
-                            <div className="contents" onMouseEnter={() => setActiveHover(indexHover)} onMouseLeave={() => setActiveHover(undefined)} key={indexHover}>
-                                <div
-                                    className={`
-                                        ${activeHover === indexHover ? "bg-primary text-background" : "bg-secondary"}
-                                        col-span-2 w-full border border-foreground flex text-center items-center justify-center p-1
-                                        transition-colors duration-200 ease-in-out
-                                    `}
-                                >{row.name}</div>
-                                
-                                <div
-                                    className={`
-                                        ${activeHover === indexHover ? "bg-primary text-background" : "bg-transparent"}
-                                        col-span-3 w-full border border-foreground flex text-center items-center justify-center p-2
-                                        transition-colors duration-200 ease-in-out
-                                    `}
-                                >
-                                    {finalFetchedProduct[0] && finalFetchedProduct[0].impedance.length > 0 ?
-                                    <div className='h-full w-full' onClick={() => openLightbox0(1)}>
-                                        <LazyImage
-                                            src={finalFetchedProduct[0].impedance[0].url.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[0].impedance[0].url}` : finalFetchedProduct[0].impedance[0].url}
-                                            alt={`${finalFetchedProduct[0].name} - Impedance`}
-                                            width={300}
-                                            height={300} 
-                                        />
-                                    </div>
-                                    :
-                                    <>-</>
-                                    }
-                                </div>
-                                
-                                <div
-                                    className={`
-                                        ${activeHover === indexHover ? "bg-primary text-background" : "bg-transparent"}
-                                        col-span-3 w-full border border-foreground flex text-center items-center justify-center p-2
-                                        transition-colors duration-200 ease-in-out
-                                    `}
-                                >
-                                    {finalFetchedProduct[1] && finalFetchedProduct[1].impedance.length > 0 ?
-                                    <div className='h-full w-full' onClick={() => openLightbox1(1)}>
-                                        <LazyImage
-                                            src={finalFetchedProduct[1].impedance[0].url.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[1].impedance[0].url}` : finalFetchedProduct[1].impedance[0].url}
-                                            alt={`${finalFetchedProduct[1].name} - Impedance`}
-                                            width={300}
-                                            height={300} 
-                                        />
-                                    </div>
-                                    :
-                                    <>-</>
-                                    }
-                                </div>
-                                
-                                <div
-                                    className={`
-                                        ${activeHover === indexHover ? "bg-primary text-background" : "bg-transparent"}
-                                        col-span-3 w-full border border-foreground flex text-center items-center justify-center p-2
-                                        transition-colors duration-200 ease-in-out
-                                    `}
-                                >
-                                    {finalFetchedProduct[2] && finalFetchedProduct[2].impedance.length > 0 ?
-                                    <div className='h-full w-full'onClick={() => openLightbox2(1)}>
-                                            <LazyImage
-                                                src={finalFetchedProduct[2].impedance[0].url.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[2].impedance[0].url}` : finalFetchedProduct[2].impedance[0].url}
-                                                alt={`${finalFetchedProduct[2].name} - Impedance`}
-                                                width={300}
-                                                height={300} 
-                                            />
+                            {rows.map((row,indexHover) => 
+                                row.attribute === 'frequency' ?
+                                    <div className="contents" onMouseEnter={() => setActiveHover(indexHover)} onMouseLeave={() => setActiveHover(undefined)} key={indexHover}>
+                                        <div
+                                            className={`
+                                                ${activeHover === indexHover ? "bg-primary text-background" : "bg-secondary"}
+                                                col-span-2 w-full border border-foreground flex text-center items-center justify-center p-1
+                                                transition-colors duration-200 ease-in-out font-semibold
+                                            `}
+                                        >
+                                            {row.name}
                                         </div>
-                                        :
-                                        <>-</>
-                                    }
-                                </div>
-                            </div>
-                        : row.attribute === 'drawing' ?
-                            <div className="contents" onMouseEnter={() => setActiveHover(indexHover)} onMouseLeave={() => setActiveHover(undefined)} key={indexHover}>
-                                <div
-                                    className={`
-                                        ${activeHover === indexHover ? "bg-primary text-background" : "bg-secondary"}
-                                        col-span-2 w-full border border-foreground flex text-center items-center justify-center p-1
-                                        transition-colors duration-200 ease-in-out
-                                    `}
-                                >{row.name}</div>
-                                
-                                <div
-                                    className={`
-                                        ${activeHover === indexHover ? "bg-primary text-background" : "bg-transparent"}
-                                        col-span-3 w-full border border-foreground flex text-center items-center justify-center p-2
-                                        transition-colors duration-200 ease-in-out
-                                    `}
-                                >
-                                    {finalFetchedProduct[0] && finalFetchedProduct[0].drawing.length > 0 ? 
-                                        <div className='h-full w-full' onClick={() => openLightbox0(1)}>
-                                            <LazyImage
-                                                src={finalFetchedProduct[0].drawing[0].url.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[0].drawing[0].url}` : finalFetchedProduct[0].drawing[0].url}
-                                                alt={`${finalFetchedProduct[0].name} - Drawing`}
-                                                width={300}
-                                                height={300} 
-                                            />
+                                        
+                                        <div    
+                                            className={`
+                                                ${activeHover === indexHover ? "bg-primary text-background" : "bg-transparent"}
+                                                col-span-3 w-full border border-foreground flex text-center items-center justify-center p-2
+                                                transition-colors duration-200 ease-in-out
+                                            `}
+                                        >
+                                            {finalFetchedProduct[0] && finalFetchedProduct[0].graph.length > 0 ?
+                                            <div className='h-full w-full' onClick={() => openLightbox0(0)}>
+                                                    <LazyImage
+                                                        src={finalFetchedProduct[0].graph[0].url.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[0].graph[0].url}` : finalFetchedProduct[0].graph[0].url}
+                                                        alt={`${finalFetchedProduct[0].name} - Frequency Response`}
+                                                        width={300}
+                                                        height={300} 
+                                                    />
+                                                </div>
+                                                :
+                                                <>-</>
+                                            }
                                         </div>
-                                    :
-                                        <>-</>
-                                }
-                                </div>
-                                
-                                <div
-                                    className={`
-                                        ${activeHover === indexHover ? "bg-primary text-background" : "bg-transparent"}
-                                        col-span-3 w-full border border-foreground flex text-center items-center justify-center p-2
-                                        transition-colors duration-200 ease-in-out
-                                    `}
-                                >
-                                    {finalFetchedProduct[1] && finalFetchedProduct[1].drawing.length > 0 ?
-                                    <div className='h-full w-full' onClick={() => openLightbox1(1)}>
-                                            <LazyImage
-                                                src={finalFetchedProduct[1].drawing[0].url.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[1].drawing[0].url}` : finalFetchedProduct[1].drawing[0].url}
-                                                alt={`${finalFetchedProduct[1].name} - Drawing`}
-                                                width={300}
-                                                height={300} 
-                                            />
-                                        </div>
-                                    :
-                                        <>-</>
-                                    }
-                                </div>
-                                
-                                <div
-                                    className={`
-                                        ${activeHover === indexHover ? "bg-primary text-background" : "bg-transparent"}
-                                        col-span-3 w-full border border-foreground flex text-center items-center justify-center p-2
-                                        transition-colors duration-200 ease-in-out
-                                    `}
-                                >
-                                    {finalFetchedProduct[2] && finalFetchedProduct[2].drawing.length > 0 ?
-                                    <div className='h-full w-full'onClick={() => openLightbox2(1)}>
-                                        <LazyImage
-                                            src={finalFetchedProduct[2].drawing[0].url.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[2].drawing[0].url}` : finalFetchedProduct[2].drawing[0].url}
-                                            alt={`${finalFetchedProduct[2].name} - Drawing`}
-                                            width={300}
-                                            height={300} 
-                                        />
-                                    </div>
-                                    :
-                                    <>-</>
-                                    }
-                                </div>
-                            </div>
-                        : row.attribute === 'manual' ?
-                            <div className="contents" onMouseEnter={() => setActiveHover(indexHover)} onMouseLeave={() => setActiveHover(undefined)} key={indexHover}>
-                                <div
-                                    className={`
-                                        ${activeHover === indexHover ? "bg-primary text-background" : "bg-secondary"}
-                                        col-span-2 w-full border border-foreground flex text-center items-center justify-center p-1
-                                        transition-colors duration-200 ease-in-out
-                                    `}
-                                >
-                                    Manual
-                                </div>
-                                <div
-                                    className={`
-                                        ${activeHover === indexHover ? "bg-primary text-background" : "bg-transparent"}
-                                        col-span-3 w-full border border-foreground flex text-center items-center justify-center p-2
-                                        transition-colors duration-200 ease-in-out
-                                    `}
-                                >
-                                    {finalFetchedProduct[0] && finalFetchedProduct[0].datasheet.length > 0 
-                                    ?
-                                        <Link href={finalFetchedProduct[0].datasheet[0].url} target="_blank">
-                                            <div className="w-full bg-primary border-2 border-foreground text-background flex justify-center items-center p-2 rounded-lg hover:bg-foreground transition-all ease-in-out duration-200 gap-2">
-                                                <div>{t("comparison-page-datasheet")}</div>
-                                                <FileDown size={20} />
+                                        
+                                        <div 
+                                            className={`
+                                                ${activeHover === indexHover ? "bg-primary text-background" : "bg-transparent"}
+                                                col-span-3 w-full border border-foreground flex text-center items-center justify-center p-2
+                                                transition-colors duration-200 ease-in-out
+                                            `}
+                                        >
+                                            {finalFetchedProduct[1] && finalFetchedProduct[1].graph.length > 0 ?
+                                            <div className='h-full w-full' onClick={() => openLightbox1(0)}>
+                                                <LazyImage
+                                                    src={finalFetchedProduct[1].graph[0].url.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[1].graph[0].url}` : finalFetchedProduct[1].graph[0].url}
+                                                    alt={`${finalFetchedProduct[1].name} - Frequency Response`}
+                                                    width={300}
+                                                    height={300} 
+                                                />
                                             </div>
-                                        </Link>
-                                    :
-                                    <>-</>
-                                    }
-                                </div>
-                                <div
-                                    className={`
-                                        ${activeHover === indexHover ? "bg-primary text-background" : "bg-transparent"}
-                                        col-span-3 w-full border border-foreground flex text-center items-center justify-center p-2
-                                        transition-colors duration-200 ease-in-out
-                                    `}
-                                >
-                                    {finalFetchedProduct[1] && finalFetchedProduct[1].datasheet.length > 0 ?
-                                        <Link href={finalFetchedProduct[1].datasheet[0].url} target="_blank">
-                                            <div className="w-full bg-primary border-2 border-foreground text-background flex justify-center items-center p-2 rounded-lg hover:bg-foreground transition-all ease-in-out duration-200 gap-2">
-                                                <div>{t("comparison-page-datasheet")}</div>
-                                                <FileDown size={20} />
+                                            :
+                                            <>-</>
+                                            }
+                                        </div>
+                                        
+                                        <div 
+                                            className={`
+                                                ${activeHover === indexHover ? "bg-primary text-background" : "bg-transparent"}
+                                                col-span-3 w-full border border-foreground flex text-center items-center justify-center p-2
+                                                transition-colors duration-200 ease-in-out
+                                            `}
+                                    >
+                                            {finalFetchedProduct[2] && finalFetchedProduct[2].graph.length > 0 ?
+                                            <div className='h-full w-full' onClick={() => openLightbox2(0)}>
+                                                <LazyImage
+                                                    src={finalFetchedProduct[2].graph[0].url.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[2].graph[0].url}` : finalFetchedProduct[2].graph[0].url}
+                                                    alt={`${finalFetchedProduct[2].name} - Frequency Response`}
+                                                    width={300}
+                                                    height={300} 
+                                                />
                                             </div>
-                                        </Link>
-                                    :
-                                    <>-</>
-                                    }
-                                </div>
-                                <div
-                                    className={`
-                                        ${activeHover === indexHover ? "bg-primary text-background" : "bg-transparent"}
-                                        col-span-3 w-full border border-foreground flex text-center items-center justify-center p-2
-                                        transition-colors duration-200 ease-in-out
-                                    `}
-                                >
-                                    {finalFetchedProduct[2] && finalFetchedProduct[2].datasheet.length > 0 ?
-                                        <Link href={finalFetchedProduct[2].datasheet[0].url} target="_blank">
-                                            <div className="w-full bg-primary border-2 border-foreground text-background flex justify-center items-center p-2 rounded-lg hover:bg-foreground transition-all ease-in-out duration-200 gap-2">
-                                                <div>{t("comparison-page-datasheet")}</div>
-                                                <FileDown size={20} />
+                                            :
+                                            <>-</>
+                                            }
+                                        </div>
+                                    </div>
+                                : row.attribute === 'impedance' ?
+                                    <div className="contents" onMouseEnter={() => setActiveHover(indexHover)} onMouseLeave={() => setActiveHover(undefined)} key={indexHover}>
+                                        <div
+                                            className={`
+                                                ${activeHover === indexHover ? "bg-primary text-background" : "bg-secondary"}
+                                                col-span-2 w-full border border-foreground flex text-center items-center justify-center p-1
+                                                transition-colors duration-200 ease-in-out font-semibold
+                                            `}
+                                        >{row.name}</div>
+                                        
+                                        <div
+                                            className={`
+                                                ${activeHover === indexHover ? "bg-primary text-background" : "bg-transparent"}
+                                                col-span-3 w-full border border-foreground flex text-center items-center justify-center p-2
+                                                transition-colors duration-200 ease-in-out
+                                            `}
+                                        >
+                                            {finalFetchedProduct[0] && finalFetchedProduct[0].impedance.length > 0 ?
+                                            <div className='h-full w-full' onClick={() => openLightbox0(1)}>
+                                                <LazyImage
+                                                    src={finalFetchedProduct[0].impedance[0].url.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[0].impedance[0].url}` : finalFetchedProduct[0].impedance[0].url}
+                                                    alt={`${finalFetchedProduct[0].name} - Impedance`}
+                                                    width={300}
+                                                    height={300} 
+                                                />
                                             </div>
-                                        </Link>
-                                        :
-                                        <>-</>
-                                    }
-                                </div>
-                            </div>
-                        :
-                        <></>
-                        )}
-
+                                            :
+                                            <>-</>
+                                            }
+                                        </div>
+                                        
+                                        <div
+                                            className={`
+                                                ${activeHover === indexHover ? "bg-primary text-background" : "bg-transparent"}
+                                                col-span-3 w-full border border-foreground flex text-center items-center justify-center p-2
+                                                transition-colors duration-200 ease-in-out
+                                            `}
+                                        >
+                                            {finalFetchedProduct[1] && finalFetchedProduct[1].impedance.length > 0 ?
+                                            <div className='h-full w-full' onClick={() => openLightbox1(1)}>
+                                                <LazyImage
+                                                    src={finalFetchedProduct[1].impedance[0].url.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[1].impedance[0].url}` : finalFetchedProduct[1].impedance[0].url}
+                                                    alt={`${finalFetchedProduct[1].name} - Impedance`}
+                                                    width={300}
+                                                    height={300} 
+                                                />
+                                            </div>
+                                            :
+                                            <>-</>
+                                            }
+                                        </div>
+                                        
+                                        <div
+                                            className={`
+                                                ${activeHover === indexHover ? "bg-primary text-background" : "bg-transparent"}
+                                                col-span-3 w-full border border-foreground flex text-center items-center justify-center p-2
+                                                transition-colors duration-200 ease-in-out
+                                            `}
+                                        >
+                                            {finalFetchedProduct[2] && finalFetchedProduct[2].impedance.length > 0 ?
+                                            <div className='h-full w-full'onClick={() => openLightbox2(1)}>
+                                                    <LazyImage
+                                                        src={finalFetchedProduct[2].impedance[0].url.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[2].impedance[0].url}` : finalFetchedProduct[2].impedance[0].url}
+                                                        alt={`${finalFetchedProduct[2].name} - Impedance`}
+                                                        width={300}
+                                                        height={300} 
+                                                    />
+                                                </div>
+                                                :
+                                                <>-</>
+                                            }
+                                        </div>
+                                    </div>
+                                : row.attribute === 'drawing' ?
+                                    <div className="contents" onMouseEnter={() => setActiveHover(indexHover)} onMouseLeave={() => setActiveHover(undefined)} key={indexHover}>
+                                        <div
+                                            className={`
+                                                ${activeHover === indexHover ? "bg-primary text-background" : "bg-secondary"}
+                                                col-span-2 w-full border border-foreground flex text-center items-center justify-center p-1
+                                                transition-colors duration-200 ease-in-out font-semibold
+                                            `}
+                                        >{row.name}</div>
+                                        
+                                        <div
+                                            className={`
+                                                ${activeHover === indexHover ? "bg-primary text-background" : "bg-transparent"}
+                                                col-span-3 w-full border border-foreground flex text-center items-center justify-center p-2
+                                                transition-colors duration-200 ease-in-out
+                                            `}
+                                        >
+                                            {finalFetchedProduct[0] && finalFetchedProduct[0].drawing.length > 0 ? 
+                                                <div className='h-full w-full' onClick={() => openLightbox0(2)}>
+                                                    <LazyImage
+                                                        src={finalFetchedProduct[0].drawing[0].url.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[0].drawing[0].url}` : finalFetchedProduct[0].drawing[0].url}
+                                                        alt={`${finalFetchedProduct[0].name} - Drawing`}
+                                                        width={300}
+                                                        height={300} 
+                                                    />
+                                                </div>
+                                            :
+                                                <>-</>
+                                        }
+                                        </div>
+                                        
+                                        <div
+                                            className={`
+                                                ${activeHover === indexHover ? "bg-primary text-background" : "bg-transparent"}
+                                                col-span-3 w-full border border-foreground flex text-center items-center justify-center p-2
+                                                transition-colors duration-200 ease-in-out
+                                            `}
+                                        >
+                                            {finalFetchedProduct[1] && finalFetchedProduct[1].drawing.length > 0 ?
+                                            <div className='h-full w-full' onClick={() => openLightbox1(2)}>
+                                                    <LazyImage
+                                                        src={finalFetchedProduct[1].drawing[0].url.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[1].drawing[0].url}` : finalFetchedProduct[1].drawing[0].url}
+                                                        alt={`${finalFetchedProduct[1].name} - Drawing`}
+                                                        width={300}
+                                                        height={300} 
+                                                    />
+                                                </div>
+                                            :
+                                                <>-</>
+                                            }
+                                        </div>
+                                        
+                                        <div
+                                            className={`
+                                                ${activeHover === indexHover ? "bg-primary text-background" : "bg-transparent"}
+                                                col-span-3 w-full border border-foreground flex text-center items-center justify-center p-2
+                                                transition-colors duration-200 ease-in-out
+                                            `}
+                                        >
+                                            {finalFetchedProduct[2] && finalFetchedProduct[2].drawing.length > 0 ?
+                                            <div className='h-full w-full'onClick={() => openLightbox2(2)}>
+                                                <LazyImage
+                                                    src={finalFetchedProduct[2].drawing[0].url.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[2].drawing[0].url}` : finalFetchedProduct[2].drawing[0].url}
+                                                    alt={`${finalFetchedProduct[2].name} - Drawing`}
+                                                    width={300}
+                                                    height={300} 
+                                                />
+                                            </div>
+                                            :
+                                            <>-</>
+                                            }
+                                        </div>
+                                    </div>
+                                : row.attribute === 'manual' ?
+                                    <div className="contents" onMouseEnter={() => setActiveHover(indexHover)} onMouseLeave={() => setActiveHover(undefined)} key={indexHover}>
+                                        <div
+                                            className={`
+                                                ${activeHover === indexHover ? "bg-primary text-background" : "bg-secondary"}
+                                                col-span-2 w-full border border-foreground flex text-center items-center justify-center p-1
+                                                transition-colors duration-200 ease-in-out
+                                                font-semibold
+                                            `}
+                                        >
+                                            Manual
+                                        </div>
+                                        <div
+                                            className={`
+                                                ${activeHover === indexHover ? "bg-primary text-background" : "bg-transparent"}
+                                                col-span-3 w-full border border-foreground flex text-center items-center justify-center p-2
+                                                transition-colors duration-200 ease-in-out
+                                            `}
+                                        >
+                                            {finalFetchedProduct[0] && finalFetchedProduct[0].datasheet.length > 0 
+                                            ?
+                                                <Link href={finalFetchedProduct[0].datasheet[0].url} target="_blank">
+                                                    <div className="w-full bg-primary border-2 border-foreground text-background flex justify-center items-center p-2 rounded-lg hover:bg-foreground transition-all ease-in-out duration-200 gap-2">
+                                                        <div>{t("comparison-page-datasheet")}</div>
+                                                        <FileDown size={20} />
+                                                    </div>
+                                                </Link>
+                                            :
+                                            <>-</>
+                                            }
+                                        </div>
+                                        <div
+                                            className={`
+                                                ${activeHover === indexHover ? "bg-primary text-background" : "bg-transparent"}
+                                                col-span-3 w-full border border-foreground flex text-center items-center justify-center p-2
+                                                transition-colors duration-200 ease-in-out
+                                            `}
+                                        >
+                                            {finalFetchedProduct[1] && finalFetchedProduct[1].datasheet.length > 0 ?
+                                                <Link href={finalFetchedProduct[1].datasheet[0].url} target="_blank">
+                                                    <div className="w-full bg-primary border-2 border-foreground text-background flex justify-center items-center p-2 rounded-lg hover:bg-foreground transition-all ease-in-out duration-200 gap-2">
+                                                        <div>{t("comparison-page-datasheet")}</div>
+                                                        <FileDown size={20} />
+                                                    </div>
+                                                </Link>
+                                            :
+                                            <>-</>
+                                            }
+                                        </div>
+                                        <div
+                                            className={`
+                                                ${activeHover === indexHover ? "bg-primary text-background" : "bg-transparent"}
+                                                col-span-3 w-full border border-foreground flex text-center items-center justify-center p-2
+                                                transition-colors duration-200 ease-in-out
+                                            `}
+                                        >
+                                            {finalFetchedProduct[2] && finalFetchedProduct[2].datasheet.length > 0 ?
+                                                <Link href={finalFetchedProduct[2].datasheet[0].url} target="_blank">
+                                                    <div className="w-full bg-primary border-2 border-foreground text-background flex justify-center items-center p-2 rounded-lg hover:bg-foreground transition-all ease-in-out duration-200 gap-2">
+                                                        <div>{t("comparison-page-datasheet")}</div>
+                                                        <FileDown size={20} />
+                                                    </div>
+                                                </Link>
+                                                :
+                                                <>-</>
+                                            }
+                                        </div>
+                                    </div>
+                                :
+                                <></>
+                            )}
+                        </>
+                    )}
 
 
 
@@ -949,34 +1035,128 @@ const ComparisonPage = () => {
               
         </div>
         }
-        {finalFetchedProduct[0] && 
+        {finalFetchedProduct[0] && ((finalFetchedProduct[0].graph && finalFetchedProduct[0].graph.length > 0) || (finalFetchedProduct[0].impedance && finalFetchedProduct[0].impedance.length > 0) || (finalFetchedProduct[0].drawing && finalFetchedProduct[0].drawing.length > 0)) && 
             <Lightbox
                 open={lightboxOpen0}
                 close={() => setLightboxOpen0(false)}
                 index={0}
-                slides={[{ src: lightboxIndex0 === 0 ? finalFetchedProduct[0].graph[0].url?.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[0].graph[0].url}` : finalFetchedProduct[0].graph[0].url : finalFetchedProduct[0].impedance[0].url.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[0].impedance[0].url}` : finalFetchedProduct[0].impedance[0].url , title: lightboxIndex0 === 0 ? `${finalFetchedProduct[0].name} - ${t('comparison-page-respon-frekuensi-foto')}` : `${finalFetchedProduct[0].name} - ${t('comparison-page-impedansi-foto')}`, alt: lightboxIndex0 === 0 ? `${finalFetchedProduct[0].name} - ${t('comparison-page-respon-frekuensi-foto')}` : `${finalFetchedProduct[0].name} - ${t('comparison-page-impedansi-foto')}` }]}
+                slides=
+                {[{ 
+                    src: lightboxIndex0 === 0 ? 
+                        finalFetchedProduct[0].graph[0].url?.startsWith('/uploads/') ? 
+                            `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[0].graph[0].url}` 
+                            : 
+                            finalFetchedProduct[0].graph[0].url 
+                        : lightboxIndex0 === 1 ?
+                        finalFetchedProduct[0].impedance[0].url.startsWith('/uploads/') ? 
+                            `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[0].impedance[0].url}`
+                            : 
+                            finalFetchedProduct[0].impedance[0].url 
+                        :
+                        finalFetchedProduct[0].drawing[0].url.startsWith('/uploads/') ? 
+                            `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[0].drawing[0].url}`
+                            : 
+                            finalFetchedProduct[0].drawing[0].url 
+                    , 
+                    title: lightboxIndex0 === 0 ? 
+                        `${finalFetchedProduct[0].name} - ${t('comparison-page-respon-frekuensi-foto')}` 
+                        : lightboxIndex0 === 1 ? 
+                        `${finalFetchedProduct[0].name} - ${t('comparison-page-impedansi-foto')}`
+                        : 
+                        `${finalFetchedProduct[0].name} - ${t('comparison-page-drawing_foto')}`
+                    , 
+                    alt: lightboxIndex0 === 0 ? 
+                        `${finalFetchedProduct[0].name} - ${t('comparison-page-respon-frekuensi-foto')}` 
+                        : lightboxIndex0 === 1 ?
+                        `${finalFetchedProduct[0].name} - ${t('comparison-page-impedansi-foto')}` 
+                        : 
+                        `${finalFetchedProduct[0].name} - ${t('comparison-page-drawing_foto')}` 
+                }]}
                 plugins={[Zoom, Captions]}
                 carousel={{ finite: true }}      // prevents looping
             />
         }
         
-        {finalFetchedProduct[1] && 
+        {finalFetchedProduct[1] && ((finalFetchedProduct[1].graph && finalFetchedProduct[1].graph.length > 0) || (finalFetchedProduct[1].impedance && finalFetchedProduct[1].impedance.length > 0) || (finalFetchedProduct[1].drawing && finalFetchedProduct[1].drawing.length > 0)) && 
             <Lightbox
                 open={lightboxOpen1}
                 close={() => setLightboxOpen1(false)}
                 index={0}
-                slides={[{ src: lightboxIndex1 === 0 ? finalFetchedProduct[1].graph[0].url?.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[1].graph[0].url}` : finalFetchedProduct[1].graph[0].url : finalFetchedProduct[1].impedance[0].url.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[1].impedance[0].url}` : finalFetchedProduct[1].impedance[0].url , title: lightboxIndex1 === 0 ? `${finalFetchedProduct[1].name} - ${t('comparison-page-respon-frekuensi-foto')}` : `${finalFetchedProduct[1].name} - ${t('comparison-page-impedansi-foto')}`, alt: lightboxIndex1 === 0 ? `${finalFetchedProduct[1].name} - ${t('comparison-page-respon-frekuensi-foto')}` : `${finalFetchedProduct[1].name} - ${t('comparison-page-impedansi-foto')}` }]}
+                slides=
+                {[{ 
+                    src: 
+                    lightboxIndex1 === 0 ? 
+                        finalFetchedProduct[1].graph[0].url?.startsWith('/uploads/') ? 
+                            `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[1].graph[0].url}` 
+                            : 
+                            finalFetchedProduct[1].graph[0].url 
+                    : lightboxIndex1 === 1 ? 
+                        finalFetchedProduct[1].impedance[0].url.startsWith('/uploads/') ? 
+                        `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[1].impedance[0].url}` 
+                        : 
+                        finalFetchedProduct[1].impedance[0].url 
+                    :
+                        finalFetchedProduct[1].drawing[0].url.startsWith('/uploads/') ? 
+                        `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[1].drawing[0].url}` 
+                        : 
+                        finalFetchedProduct[1].drawing[0].url 
+                    ,
+                    title: 
+                        lightboxIndex1 === 0 ? 
+                            `${finalFetchedProduct[1].name} - ${t('comparison-page-respon-frekuensi-foto')}` 
+                        : lightboxIndex1 === 1 ? 
+                            `${finalFetchedProduct[1].name} - ${t('comparison-page-impedansi-foto')}`
+                        : 
+                            `${finalFetchedProduct[1].name} - ${t('comparison-page-drawing_foto')}`
+                    , 
+                    alt: 
+                        lightboxIndex1 === 0 ? 
+                            `${finalFetchedProduct[1].name} - ${t('comparison-page-respon-frekuensi-foto')}` 
+                        : lightboxIndex1 === 1 ? 
+                            `${finalFetchedProduct[1].name} - ${t('comparison-page-impedansi-foto')}` 
+                        : 
+                            `${finalFetchedProduct[1].name} - ${t('comparison-page-drawing_foto')}` 
+                }]}
                 plugins={[Zoom, Captions]}
                 carousel={{ finite: true }}      // prevents looping
             />
         }
         
-        {finalFetchedProduct[2] && 
+        {finalFetchedProduct[2] && ((finalFetchedProduct[2].graph && finalFetchedProduct[2].graph.length > 0) || (finalFetchedProduct[2].impedance && finalFetchedProduct[2].impedance.length > 0) || (finalFetchedProduct[2].drawing && finalFetchedProduct[2].drawing.length > 0)) && 
             <Lightbox
                 open={lightboxOpen2}
                 close={() => setLightboxOpen2(false)}
                 index={0}
-                slides={[{ src: lightboxIndex2 === 0 ? finalFetchedProduct[2].graph[0].url?.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[2].graph[0].url}` : finalFetchedProduct[2].graph[0].url : finalFetchedProduct[2].impedance[0].url.startsWith('/uploads/') ? `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[2].impedance[0].url}` : finalFetchedProduct[2].impedance[0].url , title: lightboxIndex2 === 0 ? `${finalFetchedProduct[2].name} - ${t('comparison-page-respon-frekuensi-foto')}` : `${finalFetchedProduct[2].name} - ${t('comparison-page-impedansi-foto')}`, alt: lightboxIndex2 === 0 ? `${finalFetchedProduct[2].name} - ${t('comparison-page-respon-frekuensi-foto')}` : `${finalFetchedProduct[2].name} - ${t('comparison-page-impedansi-foto')}` }]}
+                slides=
+                {[{ 
+                    src: lightboxIndex2 === 0 ? 
+                        finalFetchedProduct[2].graph[0].url?.startsWith('/uploads/') ? 
+                            `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[2].graph[0].url}` 
+                            : 
+                            finalFetchedProduct[2].graph[0].url 
+                        : lightboxIndex2 === 1 ? 
+                        finalFetchedProduct[2].impedance[0].url.startsWith('/uploads/') ? 
+                            `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[2].impedance[0].url}`
+                            : 
+                            finalFetchedProduct[2].impedance[0].url 
+                        :
+                        finalFetchedProduct[2].drawing[0].url.startsWith('/uploads/') ? 
+                            `${process.env.NEXT_PUBLIC_ROOT_URL}${finalFetchedProduct[2].drawing[0].url}`
+                            : 
+                            finalFetchedProduct[2].drawing[0].url 
+                    , title: lightboxIndex2 === 0 ?
+                        `${finalFetchedProduct[2].name} - ${t('comparison-page-respon-frekuensi-foto')}` 
+                        : lightboxIndex2 === 1 ?
+                        `${finalFetchedProduct[2].name} - ${t('comparison-page-impedansi-foto')}`
+                        :
+                        `${finalFetchedProduct[2].name} - ${t('comparison-page-drawing_foto')}`
+                    , alt: lightboxIndex2 === 0 ? 
+                        `${finalFetchedProduct[2].name} - ${t('comparison-page-respon-frekuensi-foto')}` 
+                        : lightboxIndex2 === 1 ? 
+                        `${finalFetchedProduct[2].name} - ${t('comparison-page-impedansi-foto')}` 
+                        :
+                        `${finalFetchedProduct[2].name} - ${t('comparison-page-drawing_foto')}` 
+                }]}
                 plugins={[Zoom, Captions]}
                 carousel={{ finite: true }}      // prevents looping
             />

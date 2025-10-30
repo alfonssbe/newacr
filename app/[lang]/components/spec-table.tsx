@@ -1,5 +1,8 @@
+"use client"
+
 import { SpecificationProp } from '@/app/types';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
+import { useState } from 'react';
 
 interface Props {
   spec: SpecificationProp[];
@@ -18,11 +21,12 @@ export default function SpecificationTable({ spec, styling, stylingTitle, locale
     acc[curr.parentname].push(curr);
     return acc;
   }, {} as Record<string, SpecificationProp[]>);
+  const [activeHover, setActiveHover] = useState<number>()
 
 
   return (
     <div className='pt-8'>
-      {Object.entries(groupedByParent).map(([parentName, subGroups]) => {
+      {Object.entries(groupedByParent).map(([parentName, subGroups], index) => {
         // Step 2: Collect all unique childnames
         const allChildren = Array.from(
           new Set(subGroups.flatMap((sub) => sub.child.map((c) => (locale === 'en' ? c.childnameEnglish : c.childnameIndo))))
@@ -63,8 +67,11 @@ export default function SpecificationTable({ spec, styling, stylingTitle, locale
 
                 {/* Data Rows */}
                 {allChildren.map((childName, rowIdx) => (
-                  <TableRow key={rowIdx}>
-                    <TableCell className={`${styling} p-2 border`}>
+                  <TableRow key={rowIdx}
+                    onMouseEnter={() => setActiveHover(rowIdx + (allChildren.length * index))}
+                    onMouseLeave={() => setActiveHover(undefined)}
+                  >
+                    <TableCell className={`${styling} p-2 border ${activeHover === (rowIdx + (allChildren.length * index)) ? "bg-primary text-background" : "bg-background"} font-semibold`}>
                       {childName}
                       {allNotes[rowIdx] && allNotes[rowIdx] !== '' && (
                         <sup className="text-xs ml-1">({counter++})</sup>
@@ -79,7 +86,7 @@ export default function SpecificationTable({ spec, styling, stylingTitle, locale
                       return (
                         <TableCell
                           key={subIdx}
-                          className={`${styling} text-left p-2 border`}
+                          className={`${styling} text-left p-2 border ${activeHover === (rowIdx + (allChildren.length * index)) ? "bg-primary text-background" : "bg-background"}`}
                         >
                           {value}
                         </TableCell>

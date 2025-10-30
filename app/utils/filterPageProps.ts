@@ -1,6 +1,6 @@
 export const allproducts = [
   'series',
-  'series-acr',
+  'acr-series',
   'type',
   'impedance',
   'program-power',

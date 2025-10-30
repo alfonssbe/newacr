@@ -62,8 +62,6 @@ const formSchema = z.object({
   isFeatured: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional(),
   isNewProduct: z.boolean().default(false).optional(),
-  isHorn: z.boolean().default(false).optional(),
-  isCeiling: z.boolean().default(false).optional(),
   haveSparepart: z.boolean().default(false).optional(),
   series: z.string().optional(),
 });
@@ -130,8 +128,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     isFeatured: false,
     isArchived: false,
     isNewProduct: false,
-    isHorn: false,
-    isCeiling: false,
     haveSparepart: false,
     series: '',
   }
@@ -1520,52 +1516,6 @@ if (!editor || !editorEnglish) return null
                 </FormItem>
               )}
             /> */}
-             <FormField
-              control={form.control}
-              name="isHorn"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      // @ts-ignore
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>
-                      Horn Product
-                    </FormLabel>
-                    <FormDescription>
-                     Check this if this product is a horn product.
-                    </FormDescription>
-                  </div>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="isCeiling"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      // @ts-ignore
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>
-                      Ceiling Product
-                    </FormLabel>
-                    <FormDescription>
-                     Check this if this product is a ceiling product.
-                    </FormDescription>
-                  </div>
-                </FormItem>
-              )}
-            />
             <FormField
               control={form.control}
               name="haveSparepart"
