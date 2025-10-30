@@ -4,7 +4,7 @@ const { readFile } = require('fs/promises');
 const { join } = require('path');
 const next = require('next');
 
-const dev = false;
+const dev = true;
 const hostname = 'localhost';
 const port = 3002;
 

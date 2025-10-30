@@ -6,6 +6,9 @@ import { getTranslations } from "next-intl/server";
 import SingleNewsLayout from "../../components/all-layout/single-news/single-news-layout";
 import AllSubDriversLayout from "../../components/all-layout/all-drivers/subDrivers/subDriversLayout";
 import NotFound from "../../components/all-pages/not-found";
+import getAllNewsGSP from "@/app/actions/get-all-news-for-gsp";
+import getAllProductsGSP from "@/app/actions/get-all-products-for-gsp";
+import { allLocalesSubDrivers } from "@/lib/gsp_var";
 
 // export const revalidate = 86400
 // export async function generateStaticParams() {

@@ -301,18 +301,18 @@ const ComparisonPage = () => {
             <div className="flex justify-center items-center w-full">
                 <div
                     ref={scrollContainerRef}
-                    className={`flex overflow-x-auto cursor-grab ${finalFetchedProduct.length > 0 && 'border'} min-h-[400px]`}
+                    className={`flex overflow-x-auto cursor-grab ${finalFetchedProduct.length > 0 && (finalFetchedProduct[0] || finalFetchedProduct[1] || finalFetchedProduct[2]) && 'border'} min-h-[400px]`}
                     onMouseDown={handleMouseDown}
                     onMouseMove={handleMouseMove}
                     onMouseUp={handleMouseUp}
                     onMouseLeave={handleMouseLeave}
                     style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
                 >
-                <div className={`grid ${finalFetchedProduct.length > 0 ? 'grid-cols-[repeat(11,125px)]' : 'grid-cols-[repeat(9,125px)]'} min-w-max pt-4`}>
+                <div className={`grid ${finalFetchedProduct.length > 0 && (finalFetchedProduct[0] || finalFetchedProduct[1] || finalFetchedProduct[2]) ? 'grid-cols-[repeat(11,125px)]' : 'grid-cols-[repeat(9,125px)]'} min-w-max pt-4`}>
                     
                     {/* SEARCH */}
                     <>
-                        {finalFetchedProduct.length > 0 && 
+                        {finalFetchedProduct.length > 0 && (finalFetchedProduct[0] || finalFetchedProduct[1] || finalFetchedProduct[2]) && 
                             <div className='col-span-2 w-full'></div>
                         }
                         <div className="col-span-3 w-full flex items-center justify-center pb-4 px-2">
@@ -718,7 +718,7 @@ const ComparisonPage = () => {
                     )}
 
                     
-                    {finalFetchedProduct.length > 0 && rows.length > 0 && (
+                    {finalFetchedProduct.length > 0 && (finalFetchedProduct[0] || finalFetchedProduct[1] || finalFetchedProduct[2]) && rows.length > 0 && (
                         <>
                             <div className='col-span-11 py-4 font-bold text-xl border-foreground bg-secondary-foreground text-background border pl-2'>
                                 {t("comparison-page-other-data")}
